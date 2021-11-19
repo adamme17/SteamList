@@ -16,6 +16,16 @@
 		450C8BE42742539D00549239 /* SteamListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450C8BE32742539D00549239 /* SteamListTests.swift */; };
 		450C8BEE2742539D00549239 /* SteamListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450C8BED2742539D00549239 /* SteamListUITests.swift */; };
 		450C8BF02742539D00549239 /* SteamListUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450C8BEF2742539D00549239 /* SteamListUITestsLaunchTests.swift */; };
+		4552D52B2746775000B16B0D /* Network Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552D52A2746775000B16B0D /* Network Manager.swift */; };
+		4552D52D2746787100B16B0D /* GamesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552D52C2746787100B16B0D /* GamesManager.swift */; };
+		4552D52F2746788400B16B0D /* GamesManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552D52E2746788400B16B0D /* GamesManagerProtocol.swift */; };
+		456A8ED62745009900875379 /* DetailGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8ED52745009900875379 /* DetailGameViewController.swift */; };
+		456A8ED8274500D300875379 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8ED7274500D300875379 /* FavoritesViewController.swift */; };
+		456A8EDA274500E100875379 /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8ED9274500E100875379 /* NewsViewController.swift */; };
+		456A8EDC274500F700875379 /* DetailNewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8EDB274500F700875379 /* DetailNewsViewController.swift */; };
+		456A8EE027451D6200875379 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8EDF27451D6200875379 /* GameViewController.swift */; };
+		456A8EE22745427800875379 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8EE12745427800875379 /* CustomCell.swift */; };
+		45766A742744FB6500F59FDA /* Games.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45766A732744FB6500F59FDA /* Games.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +59,16 @@
 		450C8BE92742539D00549239 /* SteamListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SteamListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		450C8BED2742539D00549239 /* SteamListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteamListUITests.swift; sourceTree = "<group>"; };
 		450C8BEF2742539D00549239 /* SteamListUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteamListUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		4552D52A2746775000B16B0D /* Network Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Network Manager.swift"; sourceTree = "<group>"; };
+		4552D52C2746787100B16B0D /* GamesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesManager.swift; sourceTree = "<group>"; };
+		4552D52E2746788400B16B0D /* GamesManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesManagerProtocol.swift; sourceTree = "<group>"; };
+		456A8ED52745009900875379 /* DetailGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGameViewController.swift; sourceTree = "<group>"; };
+		456A8ED7274500D300875379 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		456A8ED9274500E100875379 /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
+		456A8EDB274500F700875379 /* DetailNewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailNewsViewController.swift; sourceTree = "<group>"; };
+		456A8EDF27451D6200875379 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		456A8EE12745427800875379 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
+		45766A732744FB6500F59FDA /* Games.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Games.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,10 +119,11 @@
 		450C8BC82742539C00549239 /* SteamList */ = {
 			isa = PBXGroup;
 			children = (
-				450C8BC92742539C00549239 /* AppDelegate.swift */,
-				450C8BCB2742539C00549239 /* SceneDelegate.swift */,
-				450C8BCD2742539C00549239 /* ViewController.swift */,
-				450C8BD52742539D00549239 /* Assets.xcassets */,
+				4552D5292746772F00B16B0D /* Network Service */,
+				45766A722744FADF00F59FDA /* Resources */,
+				45766A712744FAC100F59FDA /* Controller */,
+				45766A702744FABB00F59FDA /* View */,
+				45766A6F2744FAAE00F59FDA /* Model */,
 				450C8BD72742539D00549239 /* LaunchScreen.storyboard */,
 				450C8BDA2742539D00549239 /* Info.plist */,
 				450C8BD22742539C00549239 /* SteamList.xcdatamodeld */,
@@ -125,6 +146,55 @@
 				450C8BEF2742539D00549239 /* SteamListUITestsLaunchTests.swift */,
 			);
 			path = SteamListUITests;
+			sourceTree = "<group>";
+		};
+		4552D5292746772F00B16B0D /* Network Service */ = {
+			isa = PBXGroup;
+			children = (
+				4552D52A2746775000B16B0D /* Network Manager.swift */,
+			);
+			path = "Network Service";
+			sourceTree = "<group>";
+		};
+		45766A6F2744FAAE00F59FDA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				45766A732744FB6500F59FDA /* Games.swift */,
+				4552D52C2746787100B16B0D /* GamesManager.swift */,
+				4552D52E2746788400B16B0D /* GamesManagerProtocol.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		45766A702744FABB00F59FDA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				450C8BD52742539D00549239 /* Assets.xcassets */,
+				456A8EE12745427800875379 /* CustomCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		45766A712744FAC100F59FDA /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				450C8BCD2742539C00549239 /* ViewController.swift */,
+				456A8ED52745009900875379 /* DetailGameViewController.swift */,
+				456A8ED7274500D300875379 /* FavoritesViewController.swift */,
+				456A8ED9274500E100875379 /* NewsViewController.swift */,
+				456A8EDB274500F700875379 /* DetailNewsViewController.swift */,
+				456A8EDF27451D6200875379 /* GameViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		45766A722744FADF00F59FDA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				450C8BC92742539C00549239 /* AppDelegate.swift */,
+				450C8BCB2742539C00549239 /* SceneDelegate.swift */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,10 +327,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				456A8EE027451D6200875379 /* GameViewController.swift in Sources */,
+				4552D52D2746787100B16B0D /* GamesManager.swift in Sources */,
 				450C8BD42742539C00549239 /* SteamList.xcdatamodeld in Sources */,
+				4552D52F2746788400B16B0D /* GamesManagerProtocol.swift in Sources */,
+				456A8EE22745427800875379 /* CustomCell.swift in Sources */,
+				456A8EDC274500F700875379 /* DetailNewsViewController.swift in Sources */,
 				450C8BCE2742539C00549239 /* ViewController.swift in Sources */,
+				4552D52B2746775000B16B0D /* Network Manager.swift in Sources */,
+				456A8ED8274500D300875379 /* FavoritesViewController.swift in Sources */,
 				450C8BCA2742539C00549239 /* AppDelegate.swift in Sources */,
+				456A8ED62745009900875379 /* DetailGameViewController.swift in Sources */,
+				45766A742744FB6500F59FDA /* Games.swift in Sources */,
 				450C8BCC2742539C00549239 /* SceneDelegate.swift in Sources */,
+				456A8EDA274500E100875379 /* NewsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
