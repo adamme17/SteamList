@@ -26,6 +26,7 @@
 		456A8EE027451D6200875379 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8EDF27451D6200875379 /* GameViewController.swift */; };
 		456A8EE22745427800875379 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8EE12745427800875379 /* CustomCell.swift */; };
 		45766A742744FB6500F59FDA /* Games.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45766A732744FB6500F59FDA /* Games.swift */; };
+		45F73A7C274BBC7D0026932F /* SteamEndPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F73A7B274BBC7D0026932F /* SteamEndPoints.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		456A8EDF27451D6200875379 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		456A8EE12745427800875379 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
 		45766A732744FB6500F59FDA /* Games.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Games.swift; sourceTree = "<group>"; };
+		45F73A7B274BBC7D0026932F /* SteamEndPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteamEndPoints.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +164,7 @@
 				45766A732744FB6500F59FDA /* Games.swift */,
 				4552D52C2746787100B16B0D /* GamesManager.swift */,
 				4552D52E2746788400B16B0D /* GamesManagerProtocol.swift */,
+				45F73A7B274BBC7D0026932F /* SteamEndPoints.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				4552D52B2746775000B16B0D /* Network Manager.swift in Sources */,
 				456A8ED8274500D300875379 /* FavoritesViewController.swift in Sources */,
 				450C8BCA2742539C00549239 /* AppDelegate.swift in Sources */,
+				45F73A7C274BBC7D0026932F /* SteamEndPoints.swift in Sources */,
 				456A8ED62745009900875379 /* DetailGameViewController.swift in Sources */,
 				45766A742744FB6500F59FDA /* Games.swift in Sources */,
 				450C8BCC2742539C00549239 /* SceneDelegate.swift in Sources */,

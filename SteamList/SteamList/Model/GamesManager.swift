@@ -19,8 +19,8 @@ final class GamesManager {
 }
 
 extension GamesManager: GamesManagerProtocol {
-    func getGames(completion: @escaping (Result<[Games], Error>) -> Void) {
-        network.request() { data, response, error in
+    func getGames(endPoint: SteamEndPoints, completion: @escaping (Result<GamesList, Error>) -> Void) {
+        network.request(endPoint: endPoint) { data, response, error in
             if error != nil {
                 completion(.failure(NetworkResponse.failed))
             }
@@ -32,9 +32,12 @@ extension GamesManager: GamesManagerProtocol {
                             return
                         }
                         do {
-                            let apiResponse = try JSONDecoder().decode([Games].self, from: responseData)
+                            let apiResponse = try JSONDecoder().decode(GamesList.self, from: responseData)
+                            print(response.description)
+                            print(response.statusCode)
                             completion(.success(apiResponse))
-                        } catch {
+                        } catch let error {
+                            print(error.localizedDescription)
                             completion(.failure(NetworkResponse.ubableToDecode))
                         }
                         

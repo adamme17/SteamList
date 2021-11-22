@@ -9,5 +9,5 @@ import Foundation
 
 
 protocol GamesManagerProtocol {
-    func getGames(completion: @escaping (Result<[Games],Error>) -> Void)
+    func getGames(endPoint: SteamEndPoints ,completion: @escaping (Result<GamesList,Error>) -> Void)
 }

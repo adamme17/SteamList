@@ -21,15 +21,18 @@ class CustomCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private var cellViewModel: Games?
+    
+    
     //MARK: - Setup
     
-    func setupView() {
+    private func setupView() {
         safeArea = layoutMarginsGuide
         setupImageView()
         setupNameLabel()
     }
     
-    func setupImageView() {
+    private func setupImageView() {
         addSubview(imageIV)
 
         imageIV.translatesAutoresizingMaskIntoConstraints = false
@@ -40,7 +43,7 @@ class CustomCell: UITableViewCell {
         //imageIV.backgroundColor = .red
     }
     
-    func setupNameLabel() {
+    private func setupNameLabel() {
         addSubview(nameLabel)
 
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -49,5 +52,11 @@ class CustomCell: UITableViewCell {
         
         nameLabel.font = UIFont(name: "Verdana-Bold", size: 16)
     }
+    
+    func setupModel(model: Games) {
+        self.cellViewModel = model
+        self.nameLabel.text = model.name
+    }
+    
 }
 

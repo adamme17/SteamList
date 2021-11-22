@@ -18,10 +18,10 @@ public class NetworkManager {
     typealias NetworkRouterCompletion = (_ data: Data?,_ response: URLResponse?,_ error: Error?)->()
     var task: URLSessionTask?
     
-    func request (completion: @escaping NetworkRouterCompletion) {
+    func request (endPoint: SteamEndPoints, completion: @escaping NetworkRouterCompletion) {
         let session = URLSession.shared
         do {
-            guard let request = try buildRequest()
+            guard let request = try buildRequest(endPoint)
             else {
                 completion(nil, nil, ErrorHandler.invalidURL)
                 return
@@ -41,9 +41,9 @@ public class NetworkManager {
         task?.cancel()
     }
     
-    private func buildRequest() throws -> URLRequest? {
+    private func buildRequest(_ endPoint: SteamEndPoints) throws -> URLRequest? {
         
-        guard let requestUrl = URL(string: "https://api.steampowered.com/ISteamApps/GetAppList/v2/?")
+        guard let requestUrl = URL(string: endPoint.baseUrl)
         else { return nil }
         
         var request = URLRequest(url: requestUrl,

@@ -15,22 +15,19 @@ class GameViewController: UIViewController {
     
     let gamesManager = GamesManager()
 
-    var pageId = 1
-
-    func loadEventsPage (pageId: Int) {
-        gamesManager.getGames() { result in
+    func loadEventsPage() {
+        gamesManager.getGames(endPoint: .getGamesList) { result in
             switch result {
-            case .success(let events):
-                self.pageId += 1
-                let events = events
+            case .success(let games):
+                let games = games.applist.apps
 //                if events.isEmpty {
 //                    self.loadEventsPage(pageId: pageId+1)
 //                }
 
 //                self.storageManager.prepare(dataForSaving: events)
 
-                for event in events {
-                    self.someList.append(event)
+                for game in games {
+                    self.someList.append(game)
                     //self.someList.append(event.actor.login)
                 }
                 DispatchQueue.main.async {
@@ -43,15 +40,15 @@ class GameViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-//       someList.append(contentsOf: storageManager.fetchAllData())
-//       loadEventsPage(pageId: pageId)
+       //someList.append(contentsOf: storageManager.fetchAllData())
+       loadEventsPage()
     }
     
     override func viewDidLoad() {
         view.backgroundColor = .white
         safeArea = view.layoutMarginsGuide
-//        tableView.dataSource = self
-//        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.delegate = self
         
         tableView.register(CustomCell.self, forCellReuseIdentifier: "cellId")
         
@@ -70,5 +67,22 @@ class GameViewController: UIViewController {
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
+    }
+}
+
+extension GameViewController: UITableViewDelegate {
+    
+}
+
+
+extension GameViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        someList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = CustomCell()
+        cell.setupModel(model: someList[indexPath.row])
+        return cell
     }
 }
