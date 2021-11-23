@@ -40,7 +40,7 @@ extension GamesManager: GamesManagerProtocol {
                             print(error.localizedDescription)
                             completion(.failure(NetworkResponse.ubableToDecode))
                         }
-                        
+
                     default:
                         print(response.description)
                         print(response.statusCode)
@@ -50,5 +50,3 @@ extension GamesManager: GamesManagerProtocol {
         }
     }
 }
-
-

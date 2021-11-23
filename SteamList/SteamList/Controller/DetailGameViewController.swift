@@ -8,10 +8,10 @@
 import UIKit
 
 class DetailGameViewController: UIViewController {
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         view.backgroundColor = .blue
     }
 }

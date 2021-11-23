@@ -18,9 +18,9 @@ struct Apps: Codable {
 struct Games: Codable {
     let appid: Int
     let name: String
-    
-    init(app_id: Int, name: String) {
-        self.appid = app_id
+
+    init(appId: Int, name: String) {
+        self.appid = appId
         self.name = name
     }
 }

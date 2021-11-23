@@ -16,7 +16,7 @@
 		450C8BE42742539D00549239 /* SteamListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450C8BE32742539D00549239 /* SteamListTests.swift */; };
 		450C8BEE2742539D00549239 /* SteamListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450C8BED2742539D00549239 /* SteamListUITests.swift */; };
 		450C8BF02742539D00549239 /* SteamListUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450C8BEF2742539D00549239 /* SteamListUITestsLaunchTests.swift */; };
-		4552D52B2746775000B16B0D /* Network Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552D52A2746775000B16B0D /* Network Manager.swift */; };
+		4552D52B2746775000B16B0D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552D52A2746775000B16B0D /* NetworkManager.swift */; };
 		4552D52D2746787100B16B0D /* GamesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552D52C2746787100B16B0D /* GamesManager.swift */; };
 		4552D52F2746788400B16B0D /* GamesManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552D52E2746788400B16B0D /* GamesManagerProtocol.swift */; };
 		456A8ED62745009900875379 /* DetailGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8ED52745009900875379 /* DetailGameViewController.swift */; };
@@ -60,7 +60,7 @@
 		450C8BE92742539D00549239 /* SteamListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SteamListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		450C8BED2742539D00549239 /* SteamListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteamListUITests.swift; sourceTree = "<group>"; };
 		450C8BEF2742539D00549239 /* SteamListUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteamListUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		4552D52A2746775000B16B0D /* Network Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Network Manager.swift"; sourceTree = "<group>"; };
+		4552D52A2746775000B16B0D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		4552D52C2746787100B16B0D /* GamesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesManager.swift; sourceTree = "<group>"; };
 		4552D52E2746788400B16B0D /* GamesManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesManagerProtocol.swift; sourceTree = "<group>"; };
 		456A8ED52745009900875379 /* DetailGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGameViewController.swift; sourceTree = "<group>"; };
@@ -153,7 +153,8 @@
 		4552D5292746772F00B16B0D /* Network Service */ = {
 			isa = PBXGroup;
 			children = (
-				4552D52A2746775000B16B0D /* Network Manager.swift */,
+				4552D52A2746775000B16B0D /* NetworkManager.swift */,
+				45F73A7B274BBC7D0026932F /* SteamEndPoints.swift */,
 			);
 			path = "Network Service";
 			sourceTree = "<group>";
@@ -164,7 +165,6 @@
 				45766A732744FB6500F59FDA /* Games.swift */,
 				4552D52C2746787100B16B0D /* GamesManager.swift */,
 				4552D52E2746788400B16B0D /* GamesManagerProtocol.swift */,
-				45F73A7B274BBC7D0026932F /* SteamEndPoints.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -210,6 +210,7 @@
 				450C8BC22742539C00549239 /* Sources */,
 				450C8BC32742539C00549239 /* Frameworks */,
 				450C8BC42742539C00549239 /* Resources */,
+				458E9DBE274CDBC00092C451 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -325,6 +326,26 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		458E9DBE274CDBC00092C451 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint does not exist, download it from https://github.com/realm/SwiftLint\"\n  exit 1\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		450C8BC22742539C00549239 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -337,7 +358,7 @@
 				456A8EE22745427800875379 /* CustomCell.swift in Sources */,
 				456A8EDC274500F700875379 /* DetailNewsViewController.swift in Sources */,
 				450C8BCE2742539C00549239 /* ViewController.swift in Sources */,
-				4552D52B2746775000B16B0D /* Network Manager.swift in Sources */,
+				4552D52B2746775000B16B0D /* NetworkManager.swift in Sources */,
 				456A8ED8274500D300875379 /* FavoritesViewController.swift in Sources */,
 				450C8BCA2742539C00549239 /* AppDelegate.swift in Sources */,
 				45F73A7C274BBC7D0026932F /* SteamEndPoints.swift in Sources */,
