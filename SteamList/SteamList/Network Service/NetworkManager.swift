@@ -13,9 +13,8 @@ extension NetworkManager {
     }
 }
 
-public class NetworkManager {
+public class NetworkManager: NetworkManagerProtocol {
 
-    typealias NetworkRouterCompletion = (_ data: Data?, _ response: URLResponse?, _ error: Error?)->Void
     var task: URLSessionTask?
 
     func request (endPoint: SteamEndPoints, completion: @escaping NetworkRouterCompletion) {
@@ -41,7 +40,7 @@ public class NetworkManager {
         task?.cancel()
     }
 
-    private func buildRequest(_ endPoint: SteamEndPoints) throws -> URLRequest? {
+    internal func buildRequest(_ endPoint: SteamEndPoints) throws -> URLRequest? {
 
         guard let requestUrl = URL(string: endPoint.baseUrl)
         else { return nil }

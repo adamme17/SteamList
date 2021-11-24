@@ -1,5 +1,5 @@
 //
-//  GameViewController.swift
+//  GameListViewController.swift
 //  SteamList
 //
 //  Created by Adam Bokun on 17.11.21.
@@ -7,13 +7,19 @@
 
 import UIKit
 
-class GameViewController: UIViewController {
+class GameListViewController: UIViewController {
 
+    private let listView = GameListView()
+   
     let tableView = UITableView()
     var safeArea: UILayoutGuide!
     var someList = [Games]()
 
     let gamesManager = GamesManager()
+    
+    override func loadView() {
+        view = listView
+    }
 
     func loadEventsPage() {
         gamesManager.getGames(endPoint: .getGamesList) { result in
@@ -31,7 +37,7 @@ class GameViewController: UIViewController {
                     // self.someList.append(event.actor.login)
                 }
                 DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                    self.listView.tableView.reloadData()
                 }
             case .failure(let error):
                 print("Error: \(error.localizedDescription)")
@@ -47,40 +53,43 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         view.backgroundColor = .white
         safeArea = view.layoutMarginsGuide
-        tableView.dataSource = self
-        tableView.delegate = self
+        
+        listView.tableView.dataSource = self
+        listView.tableView.delegate = self
 
-        tableView.register(CustomCell.self, forCellReuseIdentifier: "cellId")
-
-        setupView()
+        listView.tableView.register(GameCell.self, forCellReuseIdentifier: "cellId")
+        
+        refreshData()
+    }
+    
+    func refreshData() {
+//        let data =
+//        let state = GameListState(title: data.title, color: data.color)
+//        listView.updateState(state: state)
     }
 
-    // MARK: - Setup View
+//    // MARK: - Setup View
 
     func setupView() {
-
-        view.addSubview(tableView)
-
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-
+        listView.snp.makeConstraints { make in
+            make.edges.equalTo(safeArea)
+        }
+        
+        listView.endEditing(true)
     }
 }
 
-extension GameViewController: UITableViewDelegate {
+extension GameListViewController: UITableViewDelegate {
 
 }
 
-extension GameViewController: UITableViewDataSource {
+extension GameListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         someList.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = CustomCell()
+        let cell = GameCell()
         cell.setupModel(model: someList[indexPath.row])
         return cell
     }

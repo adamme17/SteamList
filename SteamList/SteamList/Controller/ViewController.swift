@@ -12,7 +12,7 @@ class ViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let gameVC = GameViewController()
+        let gameVC = GameListViewController()
         let favoritesVC = FavoritesViewController()
         let newsVC = NewsViewController()
 
@@ -20,7 +20,7 @@ class ViewController: UITabBarController {
         favoritesVC.title = "Favs"
         newsVC.title = "News"
 
-        self.setViewControllers([gameVC, favoritesVC, newsVC], animated: false)
+        self.setViewControllers([gameVC, favoritesVC, newsVC], animated: true)
 
         guard let items = self.tabBar.items else { return }
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomCell: UITableViewCell {
+class GameCell: UITableViewCell {
     var safeArea: UILayoutGuide!
     var imageIV = UIImageView()
     let nameLabel = UILabel()
@@ -27,29 +27,29 @@ class CustomCell: UITableViewCell {
 
     private func setupView() {
         safeArea = layoutMarginsGuide
-        setupImageView()
+//        setupImageView()
         setupNameLabel()
     }
 
-    private func setupImageView() {
-        addSubview(imageIV)
-
-        imageIV.translatesAutoresizingMaskIntoConstraints = false
-        imageIV.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
-        imageIV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        imageIV.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        imageIV.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        // imageIV.backgroundColor = .red
-    }
+//    private func setupImageView() {
+//        addSubview(imageIV)
+//
+//        imageIV.translatesAutoresizingMaskIntoConstraints = false
+//        imageIV.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
+//        imageIV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+//        imageIV.widthAnchor.constraint(equalToConstant: 60).isActive = true
+//        imageIV.heightAnchor.constraint(equalToConstant: 60).isActive = true
+//        // imageIV.backgroundColor = .red
+//    }
 
     private func setupNameLabel() {
         addSubview(nameLabel)
 
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        imageIV.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
-        imageIV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        nameLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
+        nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
 
-        nameLabel.font = UIFont(name: "Verdana-Bold", size: 16)
+//        nameLabel.font = UIFont(name: "Verdana-Bold", size: 16)
     }
 
     func setupModel(model: Games) {
