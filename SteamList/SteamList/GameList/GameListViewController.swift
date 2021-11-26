@@ -26,15 +26,11 @@ class GameListViewController: UIViewController {
             switch result {
             case .success(let games):
                 let games = games.applist.apps
-//                if events.isEmpty {
-//                    self.loadEventsPage(pageId: pageId+1)
-//                }
-
-//                self.storageManager.prepare(dataForSaving: events)
 
                 for game in games {
-                    self.someList.append(game)
-                    // self.someList.append(event.actor.login)
+                    if !game.name.isEmpty {
+                        self.someList.append(game)
+                    }
                 }
                 DispatchQueue.main.async {
                     self.listView.tableView.reloadData()
@@ -46,7 +42,7 @@ class GameListViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-       // someList.append(contentsOf: storageManager.fetchAllData())
+        listView.update(state: GameListState(title: "Games", color: .black))
        loadEventsPage()
     }
 
