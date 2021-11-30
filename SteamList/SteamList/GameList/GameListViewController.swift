@@ -10,8 +10,6 @@ import UIKit
 class GameListViewController: UIViewController {
 
     private let listView = GameListView()
-   
-    let tableView = UITableView()
     var safeArea: UILayoutGuide!
     var someList = [Games]()
 
@@ -45,19 +43,23 @@ class GameListViewController: UIViewController {
         listView.update(state: GameListState(title: "Games", color: .black))
        loadEventsPage()
     }
+    
 
     override func viewDidLoad() {
         view.backgroundColor = .white
         safeArea = view.layoutMarginsGuide
+        setupView()
         
+//        navigationItem.searchBar = listView.searchBar
+//        listView.searchBar.searchResultsUpdater = self
+//        listView.searchController.searchResultsUpdate = self
+        listView.searchBar.delegate = self
         listView.tableView.dataSource = self
         listView.tableView.delegate = self
 
         listView.tableView.register(GameCell.self, forCellReuseIdentifier: "cellId")
-        
         refreshData()
     }
-    
     func refreshData() {
 //        let data =
 //        let state = GameListState(title: data.title, color: data.color)
@@ -67,10 +69,13 @@ class GameListViewController: UIViewController {
 //    // MARK: - Setup View
 
     func setupView() {
-        listView.snp.makeConstraints { make in
-            make.edges.equalTo(safeArea)
+//        guard let navigationBar = self.navigationController?.navigationBar else {return}
+//        listView.snp.makeConstraints { make in
+//            make.edges.equalTo(safeArea)
+//        }
+        listView.searchBar.snp.makeConstraints { make in
+            make.top.equalTo(safeArea.snp.top)
         }
-        
         listView.endEditing(true)
     }
 }
@@ -89,4 +94,30 @@ extension GameListViewController: UITableViewDataSource {
         cell.setupModel(model: someList[indexPath.row])
         return cell
     }
+}
+
+extension GameListViewController: UISearchBarDelegate {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+            searchBar.showsCancelButton = true
+        }
+        
+        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+            searchBar.showsCancelButton = false
+            searchBar.text = ""
+            searchBar.resignFirstResponder()
+        }
+        
+        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+            if !searchText.isEmpty {
+                self.someList = someList.filter({ game -> Bool in
+                    return game.name.lowercased().contains(searchText.lowercased())
+                })
+                self.listView.tableView.reloadData()
+            }
+}
+
+//extension GameListViewController: UISearchResultsUpdating {
+//    func updateSearchResults(for searchController: UISearchController) {
+//
+//    }
 }

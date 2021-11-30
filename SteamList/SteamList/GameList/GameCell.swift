@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import SnapKit
 
 class GameCell: UITableViewCell {
     var safeArea: UILayoutGuide!
-    var imageIV = UIImageView()
     let nameLabel = UILabel()
+    let favoriteButton = UIButton()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -27,29 +28,30 @@ class GameCell: UITableViewCell {
 
     private func setupView() {
         safeArea = layoutMarginsGuide
-//        setupImageView()
         setupNameLabel()
+        setupFavouriteButton()
     }
-
-//    private func setupImageView() {
-//        addSubview(imageIV)
-//
-//        imageIV.translatesAutoresizingMaskIntoConstraints = false
-//        imageIV.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
-//        imageIV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-//        imageIV.widthAnchor.constraint(equalToConstant: 60).isActive = true
-//        imageIV.heightAnchor.constraint(equalToConstant: 60).isActive = true
-//        // imageIV.backgroundColor = .red
-//    }
 
     private func setupNameLabel() {
         addSubview(nameLabel)
-
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
-        nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-
-//        nameLabel.font = UIFont(name: "Verdana-Bold", size: 16)
+        nameLabel.snp.makeConstraints { (constraints) in
+            constraints.top.equalToSuperview().offset(10)
+            constraints.centerY.equalToSuperview()
+            constraints.leading.equalToSuperview().offset(15)
+        }
+    }
+    
+    private func setupFavouriteButton() {
+        addSubview(favoriteButton)
+        favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+        favoriteButton.tintColor = .orange
+        favoriteButton.snp.makeConstraints { (constraints) in
+            constraints.top.equalToSuperview().offset(10)
+            constraints.centerY.equalTo(contentView)
+            constraints.trailing.equalTo(contentView).offset(-15)
+            constraints.leading.greaterThanOrEqualTo(nameLabel.snp.trailing).offset(10)
+            constraints.width.greaterThanOrEqualTo(20)
+        }
     }
 
     func setupModel(model: Games) {

@@ -23,6 +23,15 @@ final class GameListView: UIView {
         label.textAlignment = .center
         return label
     }()
+    
+    lazy var searchBar: UISearchBar = {
+            let searchBar = UISearchBar(frame: .zero)
+            searchBar.backgroundColor = .clear
+            searchBar.searchBarStyle = .minimal
+            searchBar.isTranslucent = false
+            searchBar.placeholder = "Search"
+            return searchBar
+        }()
 
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -46,7 +55,7 @@ final class GameListView: UIView {
     }
     
     internal func setup() {
-        [tableView, titleLabel].forEach {addSubview($0)}
+        [tableView, searchBar].forEach {addSubview($0)}
         backgroundColor = .red
     }
 
@@ -55,17 +64,22 @@ final class GameListView: UIView {
     override class var requiresConstraintBasedLayout: Bool {
         return true
     }
+    
 
     override func updateConstraints() {
         super.updateConstraints()
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.width.height.equalTo(100.0)
-        }
+//        titleLabel.snp.makeConstraints { make in
+//            make.top.equalToSuperview()
+//            make.leading.equalToSuperview()
+//            make.width.height.equalTo(100.0)
+//        }
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).inset(5.0)
+            make.top.equalTo(searchBar.snp.bottom).inset(5.0)
             make.leading.bottom.trailing.equalToSuperview()
+        }
+        searchBar.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(50.0)
         }
     }
 

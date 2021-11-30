@@ -11,11 +11,14 @@ class ViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.delegate = self
         let gameVC = GameListViewController()
+        gameVC.navigationItem.title = "Games"
         let favoritesVC = FavoritesViewController()
         let newsVC = NewsViewController()
 
+        title = "Games"
+        
         gameVC.title = "Games"
         favoritesVC.title = "Favs"
         newsVC.title = "News"
@@ -32,4 +35,19 @@ class ViewController: UITabBarController {
         self.tabBar.tintColor = .systemBlue
     }
 
+}
+
+extension ViewController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        switch viewController {
+        case is GameListViewController:
+            title = "Games"
+        case is FavoritesViewController:
+            title = "Favorites"
+        case is NewsViewController:
+            title = "News"
+        default:
+            break
+        }
+    }
 }

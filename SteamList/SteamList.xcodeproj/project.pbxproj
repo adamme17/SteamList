@@ -129,6 +129,9 @@
 		450C8BC82742539C00549239 /* SteamList */ = {
 			isa = PBXGroup;
 			children = (
+				45B7689B275412DF0001C34A /* NewsDetails */,
+				45B7689A275412C00001C34A /* NewsList */,
+				45B76899275412930001C34A /* FavoritesList */,
 				450C8BDA2742539D00549239 /* Info.plist */,
 				45D9489A274E3BE4002724A9 /* GameDetails */,
 				45D94887274E2BA0002724A9 /* Resources */,
@@ -182,9 +185,6 @@
 		45766A712744FAC100F59FDA /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				45D94892274E3BB0002724A9 /* DetailNewsViewController.swift */,
-				45D94893274E3BB0002724A9 /* FavoritesViewController.swift */,
-				45D94894274E3BB0002724A9 /* NewsViewController.swift */,
 				45D94895274E3BB0002724A9 /* ViewController.swift */,
 			);
 			path = Controller;
@@ -198,6 +198,30 @@
 				45D94885274E2AAA002724A9 /* AppDelegate+RootView.swift */,
 			);
 			path = "Supproting Files";
+			sourceTree = "<group>";
+		};
+		45B76899275412930001C34A /* FavoritesList */ = {
+			isa = PBXGroup;
+			children = (
+				45D94893274E3BB0002724A9 /* FavoritesViewController.swift */,
+			);
+			path = FavoritesList;
+			sourceTree = "<group>";
+		};
+		45B7689A275412C00001C34A /* NewsList */ = {
+			isa = PBXGroup;
+			children = (
+				45D94894274E3BB0002724A9 /* NewsViewController.swift */,
+			);
+			path = NewsList;
+			sourceTree = "<group>";
+		};
+		45B7689B275412DF0001C34A /* NewsDetails */ = {
+			isa = PBXGroup;
+			children = (
+				45D94892274E3BB0002724A9 /* DetailNewsViewController.swift */,
+			);
+			path = NewsDetails;
 			sourceTree = "<group>";
 		};
 		45D9487E274DE9A1002724A9 /* GameList */ = {
