@@ -18,6 +18,7 @@ extension GameItems {
 
     @NSManaged public var appid: Int
     @NSManaged public var name: String?
+    @NSManaged public var isFavorite: Bool
 
 }
 

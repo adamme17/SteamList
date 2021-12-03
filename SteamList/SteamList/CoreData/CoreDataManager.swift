@@ -59,6 +59,7 @@ class CoreDataManager: NSObject {
         let gameItem = GameItems(context: self.managedObjectContext)
         gameItem.appid = games.appid
         gameItem.name = games.name
+        gameItem.isFavorite = games.isFavorite
         
         return gameItem
     }
