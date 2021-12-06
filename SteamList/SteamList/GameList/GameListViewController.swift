@@ -70,7 +70,7 @@ class GameListViewController: UIViewController {
     
     
     override func viewDidLoad() {
-        view.backgroundColor = .white
+        view.backgroundColor = .clear
         safeArea = view.layoutMarginsGuide
         setupView()
         listView.searchBar.delegate = self

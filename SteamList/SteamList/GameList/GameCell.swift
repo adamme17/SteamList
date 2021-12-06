@@ -11,8 +11,10 @@ import SnapKit
 class GameCell: UITableViewCell {
     var safeArea: UILayoutGuide!
     let nameLabel = UILabel()
-    let favoriteButton = UIButton()
-
+    var favoriteButton = UIButton()
+   
+    var isFavotite = false
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -27,6 +29,7 @@ class GameCell: UITableViewCell {
     // MARK: - Setup
 
     private func setupView() {
+        self.backgroundColor = .clear
         safeArea = layoutMarginsGuide
         setupNameLabel()
         setupFavouriteButton()
@@ -43,7 +46,11 @@ class GameCell: UITableViewCell {
     
     private func setupFavouriteButton() {
         addSubview(favoriteButton)
-        favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+        if isFavotite == false {
+            favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        }
         favoriteButton.tintColor = .orange
         favoriteButton.snp.makeConstraints { (constraints) in
             constraints.top.equalToSuperview().offset(10)
@@ -57,6 +64,6 @@ class GameCell: UITableViewCell {
     func setupModel(model: Games) {
         self.cellViewModel = model
         self.nameLabel.text = model.name
+        self.isFavotite = model.isFavorite
     }
-
 }

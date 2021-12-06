@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class GameListView: UIView {
+final class GameListView: BackgroundView {
 
     // MARK: - UIElements
     let tableView: UITableView = {
@@ -35,7 +35,7 @@ final class GameListView: UIView {
 
     // MARK: - Initialization
     override init(frame: CGRect) {
-        super.init(frame: .zero)
+        super.init(frame: UIScreen.main.bounds)
         setup()
     }
 
@@ -43,20 +43,22 @@ final class GameListView: UIView {
         fatalError()
     }
     
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init(frame: UIScreen.main.bounds)
         setupUI()
     }
 
     // MARK: - Setup
     internal func setupUI() {
+        self.backgroundColor = .clear
+        self.tableView.backgroundColor = .clear
         setup()
         updateConstraints()
     }
     
     internal func setup() {
         [tableView, searchBar].forEach {addSubview($0)}
-        backgroundColor = .red
+        backgroundColor = .clear
     }
 
     // MARK: - Layout
