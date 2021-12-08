@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension GameItems {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<GameItems> {
@@ -22,6 +21,6 @@ extension GameItems {
 
 }
 
-extension GameItems : Identifiable {
+extension GameItems: Identifiable {
 
 }

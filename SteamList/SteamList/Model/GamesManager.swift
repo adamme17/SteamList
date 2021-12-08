@@ -15,7 +15,11 @@ private enum NetworkResponse: String, Error {
 }
 
 final class GamesManager {
-    let network = NetworkManager()
+    let network: NetworkManagerProtocol
+    
+    init(network: NetworkManagerProtocol) {
+        self.network = network
+    }
 }
 
 extension GamesManager: GamesManagerProtocol {

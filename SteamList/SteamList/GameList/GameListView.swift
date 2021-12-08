@@ -9,14 +9,14 @@ import UIKit
 import SnapKit
 
 final class GameListView: BackgroundView {
-
+    
     // MARK: - UIElements
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -25,20 +25,20 @@ final class GameListView: BackgroundView {
     }()
     
     lazy var searchBar: UISearchBar = {
-            let searchBar = UISearchBar(frame: .zero)
-            searchBar.backgroundColor = .clear
-            searchBar.searchBarStyle = .minimal
-            searchBar.isTranslucent = false
-            searchBar.placeholder = "Search"
-            return searchBar
-        }()
-
+        let searchBar = UISearchBar(frame: .zero)
+        searchBar.backgroundColor = .clear
+        searchBar.searchBarStyle = .minimal
+        searchBar.isTranslucent = false
+        searchBar.placeholder = "Search"
+        return searchBar
+    }()
+    
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: UIScreen.main.bounds)
         setup()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -47,10 +47,10 @@ final class GameListView: BackgroundView {
         super.init(frame: UIScreen.main.bounds)
         setupUI()
     }
-
+    
     // MARK: - Setup
     internal func setupUI() {
-        self.backgroundColor = .clear
+        //        self.backgroundColor = .clear
         self.tableView.backgroundColor = .clear
         setup()
         updateConstraints()
@@ -60,21 +60,20 @@ final class GameListView: BackgroundView {
         [tableView, searchBar].forEach {addSubview($0)}
         backgroundColor = .clear
     }
-
+    
     // MARK: - Layout
     
     override class var requiresConstraintBasedLayout: Bool {
         return true
     }
     
-
     override func updateConstraints() {
         super.updateConstraints()
-//        titleLabel.snp.makeConstraints { make in
-//            make.top.equalToSuperview()
-//            make.leading.equalToSuperview()
-//            make.width.height.equalTo(100.0)
-//        }
+        //        titleLabel.snp.makeConstraints { make in
+        //            make.top.equalToSuperview()
+        //            make.leading.equalToSuperview()
+        //            make.width.height.equalTo(100.0)
+        //        }
         tableView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).inset(5.0)
             make.leading.bottom.trailing.equalToSuperview()
@@ -84,12 +83,13 @@ final class GameListView: BackgroundView {
             make.height.equalTo(50.0)
         }
     }
-
+    
     // MARK: - Update
-
+    
     func update(state: GameListState) {
+        titleLabel.textColor = .white
         titleLabel.text = state.title
-        titleLabel.textColor = state.color
+//        titleLabel.textColor = state.color
     }
 }
 

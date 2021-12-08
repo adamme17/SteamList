@@ -8,9 +8,9 @@
 import Foundation
 import CoreData
 
-class CoreDataManager: NSObject {
+class CoreDataManager: NSObject, StoreManagerProtocol {
 
-    private override init() {
+    required override init() {
         super.init()
         applicationLibraryDirectory()
     }
@@ -27,7 +27,7 @@ class CoreDataManager: NSObject {
         return urls[urls.count-1]
     }()
 
-    private func applicationLibraryDirectory() {
+    internal func applicationLibraryDirectory() {
         print(applicationDocumentsDirectory)
         if let url = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).last {
             print(url.absoluteString)
@@ -55,12 +55,12 @@ class CoreDataManager: NSObject {
         saveData()
     }
 
-    private func createEntityFrom(games: Games) -> GameItems? {
+    internal func createEntityFrom(games: Games) -> GameItems? {
         let gameItem = GameItems(context: self.managedObjectContext)
         gameItem.appid = games.appid
         gameItem.name = games.name
         gameItem.isFavorite = games.isFavorite
-        
+
         return gameItem
     }
 

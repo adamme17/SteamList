@@ -25,13 +25,13 @@ struct Games: Codable {
         self.name = name
         self.isFavorite = isFavorite
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case appid
         case name
         case isFavorite
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.appid = try container.decode(Int.self, forKey: .appid)

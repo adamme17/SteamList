@@ -12,13 +12,16 @@ class ViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
-        let gameVC = GameListViewController()
+        let network: NetworkManagerProtocol = NetworkManager()
+        let games: GamesManagerProtocol = GamesManager(network: network)
+        let store: StoreManagerProtocol = CoreDataManager()
+        let gameVC = GameListViewController(games: games, storage: store, network: network)
         gameVC.navigationItem.title = "Games"
         let favoritesVC = FavoritesViewController()
         let newsVC = NewsViewController()
 
         title = "Games"
-        
+
         gameVC.title = "Games"
         favoritesVC.title = "Favs"
         newsVC.title = "News"

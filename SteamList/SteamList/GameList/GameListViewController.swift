@@ -8,13 +8,14 @@
 import UIKit
 
 class GameListViewController: UIViewController {
-    
     private let listView = GameListView()
     var safeArea: UILayoutGuide!
-    var someList = [Games]()
+    var gamesStorage = [Games]()
+    var dataSource = [Games]()
     
-    let gamesManager = GamesManager()
-    let storageManager = CoreDataManager.shared()
+    var gamesManager: GamesManagerProtocol
+    let storageManager: StoreManagerProtocol
+    let networkManager: NetworkManagerProtocol
     
     lazy var storeQueue: OperationQueue = {
         var queue = OperationQueue()
@@ -22,6 +23,17 @@ class GameListViewController: UIViewController {
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
+    
+    init (games: GamesManagerProtocol, storage: StoreManagerProtocol, network: NetworkManagerProtocol) {
+        self.gamesManager = games
+        self.storageManager = storage
+        self.networkManager = network
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         view = listView
@@ -32,22 +44,17 @@ class GameListViewController: UIViewController {
             switch result {
             case .success(let games):
                 let games = games.applist.apps
-                
                 for game in games {
                     if !game.name.isEmpty {
-                        self.someList.append(game)
+                        self.dataSource.append(game)
+                        self.gamesStorage.append(game)
                     }
                 }
-                
                 self.storeQueue.addOperation {
-                    self.storageManager.prepare(dataForSaving: self.someList)
+                    self.storageManager.prepare(dataForSaving: self.dataSource)
                 }
-                
                 self.storeQueue.addOperation {
-                    
                 }
-                
-                //self.storeQueue.addOperation(DataSaver(gamesData: self.someList))
                 DispatchQueue.main.async {
                     self.listView.tableView.reloadData()
                 }
@@ -58,16 +65,15 @@ class GameListViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        listView.update(state: GameListState(title: "Games", color: .black))
+        listView.update(state: GameListState(title: "Games", color: .white))
         let gamesList = storageManager.fetchAllData()
         if gamesList.isEmpty {
             loadEventsPage()
         } else {
-            someList += gamesList
+            dataSource += gamesList
+            gamesStorage += gamesList
         }
-        
     }
-    
     
     override func viewDidLoad() {
         view.backgroundColor = .clear
@@ -85,13 +91,9 @@ class GameListViewController: UIViewController {
         //        listView.updateState(state: state)
     }
     
-    //    // MARK: - Setup View
+// MARK: - Setup View
     
     func setupView() {
-        //        guard let navigationBar = self.navigationController?.navigationBar else {return}
-        //        listView.snp.makeConstraints { make in
-        //            make.edges.equalTo(safeArea)
-        //        }
         listView.searchBar.snp.makeConstraints { make in
             make.top.equalTo(safeArea.snp.top)
         }
@@ -99,18 +101,16 @@ class GameListViewController: UIViewController {
     }
 }
 
-extension GameListViewController: UITableViewDelegate {
-    
-}
+extension GameListViewController: UITableViewDelegate {}
 
 extension GameListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        someList.count
+        dataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = GameCell()
-        cell.setupModel(model: someList[indexPath.row])
+        cell.setupModel(model: dataSource[indexPath.row])
         return cell
     }
 }
@@ -124,11 +124,13 @@ extension GameListViewController: UISearchBarDelegate {
         searchBar.showsCancelButton = false
         searchBar.text = ""
         searchBar.resignFirstResponder()
+        self.dataSource = gamesStorage
+        self.listView.tableView.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if !searchText.isEmpty {
-            self.someList = someList.filter({ game -> Bool in
+            self.dataSource = gamesStorage.filter({ game -> Bool in
                 return game.name.lowercased().contains(searchText.lowercased())
             })
             self.listView.tableView.reloadData()

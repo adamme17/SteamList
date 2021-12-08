@@ -26,6 +26,9 @@
 		456A8EE22745427800875379 /* GameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8EE12745427800875379 /* GameCell.swift */; };
 		45766A742744FB6500F59FDA /* Games.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45766A732744FB6500F59FDA /* Games.swift */; };
 		4578D8BB275919F9003E6BAE /* DataSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4578D8BA275919F9003E6BAE /* DataSaver.swift */; };
+		45949A31275F4D750004881C /* StoreManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45949A30275F4D750004881C /* StoreManagerProtocol.swift */; };
+		45949A35275F5EF20004881C /* DetailGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45949A34275F5EF20004881C /* DetailGameView.swift */; };
+		45949A37275F6CB00004881C /* GameDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45949A36275F6CB00004881C /* GameDetails.swift */; };
 		45B7689E275615FC0001C34A /* GameListDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 45B7689C275615FC0001C34A /* GameListDB.xcdatamodeld */; };
 		45D86662275A68C500888B3B /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D86661275A68C500888B3B /* UIColor+Extension.swift */; };
 		45D94881274DEABE002724A9 /* NetworkManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D94880274DEABE002724A9 /* NetworkManagerProtocol.swift */; };
@@ -81,6 +84,9 @@
 		456A8EE12745427800875379 /* GameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCell.swift; sourceTree = "<group>"; };
 		45766A732744FB6500F59FDA /* Games.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Games.swift; sourceTree = "<group>"; };
 		4578D8BA275919F9003E6BAE /* DataSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSaver.swift; sourceTree = "<group>"; };
+		45949A30275F4D750004881C /* StoreManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManagerProtocol.swift; sourceTree = "<group>"; };
+		45949A34275F5EF20004881C /* DetailGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGameView.swift; sourceTree = "<group>"; };
+		45949A36275F6CB00004881C /* GameDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetails.swift; sourceTree = "<group>"; };
 		45B7689D275615FC0001C34A /* GameListDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GameListDB.xcdatamodel; sourceTree = "<group>"; };
 		45D86661275A68C500888B3B /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		45D94880274DEABE002724A9 /* NetworkManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerProtocol.swift; sourceTree = "<group>"; };
@@ -184,6 +190,7 @@
 				45508C202757DFB600F80485 /* GameItems+CoreDataClass.swift */,
 				45508C212757DFB600F80485 /* GameItems+CoreDataProperties.swift */,
 				4578D8BA275919F9003E6BAE /* DataSaver.swift */,
+				45949A30275F4D750004881C /* StoreManagerProtocol.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -284,6 +291,8 @@
 			isa = PBXGroup;
 			children = (
 				45D9489B274E3BFE002724A9 /* DetailGameViewController.swift */,
+				45949A34275F5EF20004881C /* DetailGameView.swift */,
+				45949A36275F6CB00004881C /* GameDetails.swift */,
 			);
 			path = GameDetails;
 			sourceTree = "<group>";
@@ -447,9 +456,11 @@
 			files = (
 				45508C222757DFB600F80485 /* GameItems+CoreDataClass.swift in Sources */,
 				456A8EE027451D6200875379 /* GameListViewController.swift in Sources */,
+				45949A37275F6CB00004881C /* GameDetails.swift in Sources */,
 				45D94896274E3BB0002724A9 /* DetailNewsViewController.swift in Sources */,
 				45D94899274E3BB0002724A9 /* ViewController.swift in Sources */,
 				45D94886274E2AAA002724A9 /* AppDelegate+RootView.swift in Sources */,
+				45949A31275F4D750004881C /* StoreManagerProtocol.swift in Sources */,
 				45B7689E275615FC0001C34A /* GameListDB.xcdatamodeld in Sources */,
 				4552D52D2746787100B16B0D /* GamesManager.swift in Sources */,
 				45D9489C274E3BFE002724A9 /* DetailGameViewController.swift in Sources */,
@@ -462,6 +473,7 @@
 				450C8BCA2742539C00549239 /* AppDelegate.swift in Sources */,
 				45F73A7C274BBC7D0026932F /* SteamEndPoints.swift in Sources */,
 				45D94884274E2355002724A9 /* GameListView.swift in Sources */,
+				45949A35275F5EF20004881C /* DetailGameView.swift in Sources */,
 				45766A742744FB6500F59FDA /* Games.swift in Sources */,
 				450C8BCC2742539C00549239 /* SceneDelegate.swift in Sources */,
 				454F3739275A029400E4FB6B /* BackgroundView.swift in Sources */,

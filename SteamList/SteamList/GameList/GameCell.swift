@@ -12,9 +12,9 @@ class GameCell: UITableViewCell {
     var safeArea: UILayoutGuide!
     let nameLabel = UILabel()
     var favoriteButton = UIButton()
-   
+
     var isFavotite = false
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -36,6 +36,7 @@ class GameCell: UITableViewCell {
     }
 
     private func setupNameLabel() {
+        nameLabel.textColor = .white
         addSubview(nameLabel)
         nameLabel.snp.makeConstraints { (constraints) in
             constraints.top.equalToSuperview().offset(10)
@@ -43,7 +44,7 @@ class GameCell: UITableViewCell {
             constraints.leading.equalToSuperview().offset(15)
         }
     }
-    
+
     private func setupFavouriteButton() {
         addSubview(favoriteButton)
         if isFavotite == false {
