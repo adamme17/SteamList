@@ -15,4 +15,5 @@ protocol StoreManagerProtocol {
     func saveData()
     func saveDataInBackground()
     func fetchAllData() -> [Games]
+    func storeDataAsync(data: [Games])
 }

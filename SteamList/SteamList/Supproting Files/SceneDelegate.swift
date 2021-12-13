@@ -10,18 +10,61 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    let tabBarController = UITabBarController()
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
         guard let scene = (scene as? UIWindowScene) else { return }
 
         let window = UIWindow(windowScene: scene)
-        window.rootViewController = viewController()
+        let rootViewController = viewController()
+        rootViewController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        window.rootViewController = rootViewController
         window.makeKeyAndVisible()
         self.window = window
     }
 
     func viewController() -> UINavigationController {
-        return UINavigationController(rootViewController: ViewController())
+        let network: NetworkManagerProtocol = NetworkManager()
+        let games: GamesManagerProtocol = GamesManager(network: network)
+        let store: StoreManagerProtocol = CoreDataManager()
+        let gameVC = GameListViewController(games: games, storage: store, network: network)
+        gameVC.navigationItem.title = "Games"
+        let favoritesVC = FavoritesViewController()
+        let newsVC = NewsViewController()
+        
+        tabBarController.title = "Games"
+
+        gameVC.title = "Games"
+        favoritesVC.title = "Favs"
+        newsVC.title = "News"
+
+        tabBarController.setViewControllers([gameVC, favoritesVC, newsVC], animated: true)
+
+        guard let items = tabBarController.tabBar.items else { return UINavigationController() }
+
+        let images = ["list.star", "star.fill", "book.fill"]
+
+        for item in 0...2 {
+            items[item].image = UIImage(systemName: images[item])
+        }
+        tabBarController.tabBar.tintColor = .systemBlue
+        
+        return UINavigationController(rootViewController: tabBarController)
+    }
+}
+
+extension SceneDelegate: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        switch viewController {
+        case is GameListViewController:
+            tabBarController.title = "Games"
+        case is FavoritesViewController:
+            tabBarController.title = "Favorites"
+        case is NewsViewController:
+            tabBarController.title = "News"
+        default:
+            break
+        }
     }
 }

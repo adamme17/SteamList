@@ -15,6 +15,13 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         applicationLibraryDirectory()
     }
 
+    private lazy var storeQueue: OperationQueue = {
+        var queue = OperationQueue()
+        queue.name = "Store queue"
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
+    
     static let sharedConst = CoreDataManager()
 
     class func shared() -> CoreDataManager {
@@ -105,6 +112,12 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         } catch {
             print(error.localizedDescription)
             return []
+        }
+    }
+    
+    func storeDataAsync(data: [Games]) {
+        self.storeQueue.addOperation {
+            self.prepare(dataForSaving: data)
         }
     }
 }

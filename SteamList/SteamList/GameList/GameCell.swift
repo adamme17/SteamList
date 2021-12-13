@@ -12,8 +12,16 @@ class GameCell: UITableViewCell {
     var safeArea: UILayoutGuide!
     let nameLabel = UILabel()
     var favoriteButton = UIButton()
-
-    var isFavotite = false
+    
+    var isFavotite: Bool = false {
+        didSet {
+            if isFavotite == false {
+                favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+            } else {
+                favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            }
+        }
+    }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -23,6 +31,11 @@ class GameCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    @objc func buttonTapped(sender: UIButton) {
+          print("Button was tapped")
+        isFavotite.toggle()
+      }
 
     private var cellViewModel: Games?
 
@@ -37,7 +50,7 @@ class GameCell: UITableViewCell {
 
     private func setupNameLabel() {
         nameLabel.textColor = .white
-        addSubview(nameLabel)
+        contentView.addSubview(nameLabel)
         nameLabel.snp.makeConstraints { (constraints) in
             constraints.top.equalToSuperview().offset(10)
             constraints.centerY.equalToSuperview()
@@ -46,13 +59,15 @@ class GameCell: UITableViewCell {
     }
 
     private func setupFavouriteButton() {
-        addSubview(favoriteButton)
+        contentView.addSubview(favoriteButton)
         if isFavotite == false {
             favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
         } else {
             favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
         }
         favoriteButton.tintColor = .orange
+        favoriteButton.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
+        favoriteButton.clipsToBounds = true
         favoriteButton.snp.makeConstraints { (constraints) in
             constraints.top.equalToSuperview().offset(10)
             constraints.centerY.equalTo(contentView)

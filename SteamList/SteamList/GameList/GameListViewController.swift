@@ -17,13 +17,6 @@ class GameListViewController: UIViewController {
     let storageManager: StoreManagerProtocol
     let networkManager: NetworkManagerProtocol
     
-    lazy var storeQueue: OperationQueue = {
-        var queue = OperationQueue()
-        queue.name = "Store queue"
-        queue.maxConcurrentOperationCount = 1
-        return queue
-    }()
-    
     init (games: GamesManagerProtocol, storage: StoreManagerProtocol, network: NetworkManagerProtocol) {
         self.gamesManager = games
         self.storageManager = storage
@@ -50,11 +43,7 @@ class GameListViewController: UIViewController {
                         self.gamesStorage.append(game)
                     }
                 }
-                self.storeQueue.addOperation {
-                    self.storageManager.prepare(dataForSaving: self.dataSource)
-                }
-                self.storeQueue.addOperation {
-                }
+                self.storageManager.storeDataAsync(data: self.dataSource)
                 DispatchQueue.main.async {
                     self.listView.tableView.reloadData()
                 }
@@ -112,6 +101,11 @@ extension GameListViewController: UITableViewDataSource {
         let cell = GameCell()
         cell.setupModel(model: dataSource[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        print("Tapped")
     }
 }
 

@@ -37,7 +37,6 @@
 		45D94896274E3BB0002724A9 /* DetailNewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D94892274E3BB0002724A9 /* DetailNewsViewController.swift */; };
 		45D94897274E3BB0002724A9 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D94893274E3BB0002724A9 /* FavoritesViewController.swift */; };
 		45D94898274E3BB0002724A9 /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D94894274E3BB0002724A9 /* NewsViewController.swift */; };
-		45D94899274E3BB0002724A9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D94895274E3BB0002724A9 /* ViewController.swift */; };
 		45D9489C274E3BFE002724A9 /* DetailGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D9489B274E3BFE002724A9 /* DetailGameViewController.swift */; };
 		45D9489F274E9AD6002724A9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 45D9489E274E9AD6002724A9 /* SnapKit */; };
 		45F73A7C274BBC7D0026932F /* SteamEndPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F73A7B274BBC7D0026932F /* SteamEndPoints.swift */; };
@@ -95,7 +94,6 @@
 		45D94892274E3BB0002724A9 /* DetailNewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailNewsViewController.swift; sourceTree = "<group>"; };
 		45D94893274E3BB0002724A9 /* FavoritesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		45D94894274E3BB0002724A9 /* NewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
-		45D94895274E3BB0002724A9 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		45D9489B274E3BFE002724A9 /* DetailGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGameViewController.swift; sourceTree = "<group>"; };
 		45F73A7B274BBC7D0026932F /* SteamEndPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteamEndPoints.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -160,7 +158,6 @@
 				4552D5292746772F00B16B0D /* Network Service */,
 				45766A722744FADF00F59FDA /* Supproting Files */,
 				45D9487E274DE9A1002724A9 /* GameList */,
-				45766A712744FAC100F59FDA /* Controller */,
 				45766A6F2744FAAE00F59FDA /* Model */,
 			);
 			path = SteamList;
@@ -209,19 +206,12 @@
 			isa = PBXGroup;
 			children = (
 				45766A732744FB6500F59FDA /* Games.swift */,
+				45949A36275F6CB00004881C /* GameDetails.swift */,
 				4552D52C2746787100B16B0D /* GamesManager.swift */,
 				4552D52E2746788400B16B0D /* GamesManagerProtocol.swift */,
 				450C8BD22742539C00549239 /* SteamList.xcdatamodeld */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		45766A712744FAC100F59FDA /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				45D94895274E3BB0002724A9 /* ViewController.swift */,
-			);
-			path = Controller;
 			sourceTree = "<group>";
 		};
 		45766A722744FADF00F59FDA /* Supproting Files */ = {
@@ -292,7 +282,6 @@
 			children = (
 				45D9489B274E3BFE002724A9 /* DetailGameViewController.swift */,
 				45949A34275F5EF20004881C /* DetailGameView.swift */,
-				45949A36275F6CB00004881C /* GameDetails.swift */,
 			);
 			path = GameDetails;
 			sourceTree = "<group>";
@@ -390,7 +379,7 @@
 			);
 			mainGroup = 450C8BBD2742539C00549239;
 			packageReferences = (
-				45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit.git" */,
 			);
 			productRefGroup = 450C8BC72742539C00549239 /* Products */;
 			projectDirPath = "";
@@ -458,7 +447,6 @@
 				456A8EE027451D6200875379 /* GameListViewController.swift in Sources */,
 				45949A37275F6CB00004881C /* GameDetails.swift in Sources */,
 				45D94896274E3BB0002724A9 /* DetailNewsViewController.swift in Sources */,
-				45D94899274E3BB0002724A9 /* ViewController.swift in Sources */,
 				45D94886274E2AAA002724A9 /* AppDelegate+RootView.swift in Sources */,
 				45949A31275F4D750004881C /* StoreManagerProtocol.swift in Sources */,
 				45B7689E275615FC0001C34A /* GameListDB.xcdatamodeld in Sources */,
@@ -837,7 +825,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "git@github.com:SnapKit/SnapKit.git";
 			requirement = {
@@ -850,7 +838,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		45D9489E274E9AD6002724A9 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = 45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit.git" */;
 			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
