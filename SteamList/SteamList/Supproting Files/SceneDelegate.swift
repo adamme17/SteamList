@@ -19,6 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: scene)
         let rootViewController = viewController()
         rootViewController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        
         window.rootViewController = rootViewController
         window.makeKeyAndVisible()
         self.window = window
@@ -34,6 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let newsVC = NewsViewController()
         
         tabBarController.title = "Games"
+        tabBarController.delegate = self
 
         gameVC.title = "Games"
         favoritesVC.title = "Favs"

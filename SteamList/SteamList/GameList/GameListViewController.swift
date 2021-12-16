@@ -106,6 +106,11 @@ extension GameListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         print("Tapped")
+        let detailController = DetailGameViewController(games: gamesManager,
+                                                        storage: storageManager,
+                                                        network: networkManager,
+                                                        appId: self.dataSource[indexPath.row].appid)
+        self.navigationController?.pushViewController(detailController, animated: true)
     }
 }
 

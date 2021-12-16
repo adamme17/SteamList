@@ -29,7 +29,14 @@
 		45949A31275F4D750004881C /* StoreManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45949A30275F4D750004881C /* StoreManagerProtocol.swift */; };
 		45949A35275F5EF20004881C /* DetailGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45949A34275F5EF20004881C /* DetailGameView.swift */; };
 		45949A37275F6CB00004881C /* GameDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45949A36275F6CB00004881C /* GameDetails.swift */; };
+		459F978C276B526A009081A3 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459F978B276B526A009081A3 /* CustomImageView.swift */; };
 		45B7689E275615FC0001C34A /* GameListDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 45B7689C275615FC0001C34A /* GameListDB.xcdatamodeld */; };
+		45BAE3722767E83900C9D832 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BAE3712767E83900C9D832 /* News.swift */; };
+		45BAE3742767E88900C9D832 /* NewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BAE3732767E88900C9D832 /* NewsView.swift */; };
+		45BAE3762767E8E000C9D832 /* NewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BAE3752767E8E000C9D832 /* NewsCell.swift */; };
+		45BAE3782767EE7C00C9D832 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BAE3772767EE7C00C9D832 /* FavoriteButton.swift */; };
+		45CB688E276A127A00AC236B /* ScreenshotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CB688D276A127A00AC236B /* ScreenshotViewController.swift */; };
+		45CB6890276A128C00AC236B /* ScreenshotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CB688F276A128C00AC236B /* ScreenshotView.swift */; };
 		45D86662275A68C500888B3B /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D86661275A68C500888B3B /* UIColor+Extension.swift */; };
 		45D94881274DEABE002724A9 /* NetworkManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D94880274DEABE002724A9 /* NetworkManagerProtocol.swift */; };
 		45D94884274E2355002724A9 /* GameListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D94883274E2355002724A9 /* GameListView.swift */; };
@@ -86,7 +93,14 @@
 		45949A30275F4D750004881C /* StoreManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManagerProtocol.swift; sourceTree = "<group>"; };
 		45949A34275F5EF20004881C /* DetailGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGameView.swift; sourceTree = "<group>"; };
 		45949A36275F6CB00004881C /* GameDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetails.swift; sourceTree = "<group>"; };
+		459F978B276B526A009081A3 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		45B7689D275615FC0001C34A /* GameListDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GameListDB.xcdatamodel; sourceTree = "<group>"; };
+		45BAE3712767E83900C9D832 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
+		45BAE3732767E88900C9D832 /* NewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsView.swift; sourceTree = "<group>"; };
+		45BAE3752767E8E000C9D832 /* NewsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCell.swift; sourceTree = "<group>"; };
+		45BAE3772767EE7C00C9D832 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
+		45CB688D276A127A00AC236B /* ScreenshotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotViewController.swift; sourceTree = "<group>"; };
+		45CB688F276A128C00AC236B /* ScreenshotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotView.swift; sourceTree = "<group>"; };
 		45D86661275A68C500888B3B /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		45D94880274DEABE002724A9 /* NetworkManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerProtocol.swift; sourceTree = "<group>"; };
 		45D94883274E2355002724A9 /* GameListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListView.swift; sourceTree = "<group>"; };
@@ -207,9 +221,11 @@
 			children = (
 				45766A732744FB6500F59FDA /* Games.swift */,
 				45949A36275F6CB00004881C /* GameDetails.swift */,
+				45BAE3712767E83900C9D832 /* News.swift */,
 				4552D52C2746787100B16B0D /* GamesManager.swift */,
 				4552D52E2746788400B16B0D /* GamesManagerProtocol.swift */,
 				450C8BD22742539C00549239 /* SteamList.xcdatamodeld */,
+				45BAE3772767EE7C00C9D832 /* FavoriteButton.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -237,6 +253,8 @@
 			isa = PBXGroup;
 			children = (
 				45D94894274E3BB0002724A9 /* NewsViewController.swift */,
+				45BAE3732767E88900C9D832 /* NewsView.swift */,
+				45BAE3752767E8E000C9D832 /* NewsCell.swift */,
 			);
 			path = NewsList;
 			sourceTree = "<group>";
@@ -282,6 +300,9 @@
 			children = (
 				45D9489B274E3BFE002724A9 /* DetailGameViewController.swift */,
 				45949A34275F5EF20004881C /* DetailGameView.swift */,
+				45CB688D276A127A00AC236B /* ScreenshotViewController.swift */,
+				45CB688F276A128C00AC236B /* ScreenshotView.swift */,
+				459F978B276B526A009081A3 /* CustomImageView.swift */,
 			);
 			path = GameDetails;
 			sourceTree = "<group>";
@@ -379,7 +400,7 @@
 			);
 			mainGroup = 450C8BBD2742539C00549239;
 			packageReferences = (
-				45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit.git" */,
+				45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = 450C8BC72742539C00549239 /* Products */;
 			projectDirPath = "";
@@ -447,7 +468,9 @@
 				456A8EE027451D6200875379 /* GameListViewController.swift in Sources */,
 				45949A37275F6CB00004881C /* GameDetails.swift in Sources */,
 				45D94896274E3BB0002724A9 /* DetailNewsViewController.swift in Sources */,
+				45BAE3762767E8E000C9D832 /* NewsCell.swift in Sources */,
 				45D94886274E2AAA002724A9 /* AppDelegate+RootView.swift in Sources */,
+				45CB6890276A128C00AC236B /* ScreenshotView.swift in Sources */,
 				45949A31275F4D750004881C /* StoreManagerProtocol.swift in Sources */,
 				45B7689E275615FC0001C34A /* GameListDB.xcdatamodeld in Sources */,
 				4552D52D2746787100B16B0D /* GamesManager.swift in Sources */,
@@ -456,18 +479,23 @@
 				45D86662275A68C500888B3B /* UIColor+Extension.swift in Sources */,
 				453912D62757AEAC0086C52F /* CoreDataManager.swift in Sources */,
 				4552D52F2746788400B16B0D /* GamesManagerProtocol.swift in Sources */,
+				459F978C276B526A009081A3 /* CustomImageView.swift in Sources */,
 				456A8EE22745427800875379 /* GameCell.swift in Sources */,
 				4552D52B2746775000B16B0D /* NetworkManager.swift in Sources */,
 				450C8BCA2742539C00549239 /* AppDelegate.swift in Sources */,
 				45F73A7C274BBC7D0026932F /* SteamEndPoints.swift in Sources */,
 				45D94884274E2355002724A9 /* GameListView.swift in Sources */,
+				45BAE3722767E83900C9D832 /* News.swift in Sources */,
 				45949A35275F5EF20004881C /* DetailGameView.swift in Sources */,
+				45BAE3742767E88900C9D832 /* NewsView.swift in Sources */,
+				45CB688E276A127A00AC236B /* ScreenshotViewController.swift in Sources */,
 				45766A742744FB6500F59FDA /* Games.swift in Sources */,
 				450C8BCC2742539C00549239 /* SceneDelegate.swift in Sources */,
 				454F3739275A029400E4FB6B /* BackgroundView.swift in Sources */,
 				45508C232757DFB600F80485 /* GameItems+CoreDataProperties.swift in Sources */,
 				45D94898274E3BB0002724A9 /* NewsViewController.swift in Sources */,
 				45D94897274E3BB0002724A9 /* FavoritesViewController.swift in Sources */,
+				45BAE3782767EE7C00C9D832 /* FavoriteButton.swift in Sources */,
 				4578D8BB275919F9003E6BAE /* DataSaver.swift in Sources */,
 				45D94881274DEABE002724A9 /* NetworkManagerProtocol.swift in Sources */,
 			);
@@ -825,7 +853,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit.git" */ = {
+		45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "git@github.com:SnapKit/SnapKit.git";
 			requirement = {
@@ -838,7 +866,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		45D9489E274E9AD6002724A9 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit.git" */;
+			package = 45D9489D274E9AD6002724A9 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
