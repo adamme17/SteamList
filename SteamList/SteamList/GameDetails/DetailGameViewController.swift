@@ -8,21 +8,23 @@
 import UIKit
 
 class DetailGameViewController: UIViewController {
-    var games: GameDetails?
-    var detailView: DetailGameView?
+    var games: DetailResponse?
+    var detailView = DetailGameView()
     let appId: Int
-    
+    let name: String
+    let isFavorite: Bool
     var safeArea: UILayoutGuide!
-    
     var gamesManager: GamesManagerProtocol
     let storageManager: StoreManagerProtocol
     let networkManager: NetworkManagerProtocol
     
-    init (games: GamesManagerProtocol, storage: StoreManagerProtocol, network: NetworkManagerProtocol, appId: Int) {
+    init (games: GamesManagerProtocol, storage: StoreManagerProtocol, network: NetworkManagerProtocol, appId: Int, name: String, isFavorite: Bool) {
         self.gamesManager = games
         self.storageManager = storage
         self.networkManager = network
         self.appId = appId
+        self.name = name
+        self.isFavorite = isFavorite
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -30,16 +32,19 @@ class DetailGameViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-        override func loadView() {
-            view = detailView
-        }
+    override func loadView() {
+        view = detailView
+    }
     
     func loadEventsPage() {
         gamesManager.getGameDetails(endPoint: .getGameDetailsList(appId: appId)) { [unowned self] result in
             switch result {
             case .success(let model):
+                guard let model = model[String(appId)] else {
+                    return
+                }
                 self.games = model
-                detailView?.setupData(games: model)
+                detailView.setupData(games: model, appId: String(appId))
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -47,18 +52,11 @@ class DetailGameViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        detailView?.update(state: GameDetailState(name: "name of app", color: .white))
+        self.title = name
         let gamesList = storageManager.fetchAllData()
-        //        if gamesList.isEmpty {
-        loadEventsPage()
-        //        } else {
-        //            dataSource += gamesList
-        //            gamesStorage += gamesList
-        //        }
     }
     
     override func viewDidLoad() {
-        view.backgroundColor = .clear
         safeArea = view.layoutMarginsGuide
         super.viewDidLoad()
         detailView = DetailGameView()
@@ -67,7 +65,6 @@ class DetailGameViewController: UIViewController {
     }
     
     func setupUI() {
-        guard let detailView = detailView else { return }
         view.addSubview(detailView)
         detailView.translatesAutoresizingMaskIntoConstraints = false
         detailView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true

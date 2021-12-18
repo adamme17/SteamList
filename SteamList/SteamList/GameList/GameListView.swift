@@ -49,8 +49,8 @@ final class GameListView: BackgroundView {
     }
     
     // MARK: - Setup
+    
     internal func setupUI() {
-        //        self.backgroundColor = .clear
         self.tableView.backgroundColor = .clear
         setup()
         updateConstraints()
@@ -69,11 +69,6 @@ final class GameListView: BackgroundView {
     
     override func updateConstraints() {
         super.updateConstraints()
-        //        titleLabel.snp.makeConstraints { make in
-        //            make.top.equalToSuperview()
-        //            make.leading.equalToSuperview()
-        //            make.width.height.equalTo(100.0)
-        //        }
         tableView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).inset(5.0)
             make.leading.bottom.trailing.equalToSuperview()
@@ -89,7 +84,6 @@ final class GameListView: BackgroundView {
     func update(state: GameListState) {
         titleLabel.textColor = .white
         titleLabel.text = state.title
-//        titleLabel.textColor = state.color
     }
 }
 

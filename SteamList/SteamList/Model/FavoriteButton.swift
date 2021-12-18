@@ -21,7 +21,7 @@ class FavoriteButton: UIButton {
     }
 
     func setIcon(isFavorite: Bool, config: UIImage.SymbolConfiguration? = nil) {
-        if isFavorite {
+        if isFavorite == true {
             let image = UIImage(systemName: "star.fill", withConfiguration: config)
             self.setImage(image, for: .normal)
         } else {

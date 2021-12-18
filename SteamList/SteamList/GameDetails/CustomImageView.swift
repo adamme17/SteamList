@@ -14,8 +14,9 @@ class CustomImageView: UIImageView {
     let spinner = UIActivityIndicatorView(style: .medium)
 
     func loadImage(from url: URL) {
-        image = nil
-
+        DispatchQueue.main.async {
+            self.image = nil
+        }
         addSpinner()
 
         if let task = task {
@@ -50,13 +51,14 @@ class CustomImageView: UIImageView {
     }
 
     func addSpinner() {
-        addSubview(spinner)
+        DispatchQueue.main.async {
+            self.addSubview(self.spinner)
+            self.spinner.translatesAutoresizingMaskIntoConstraints = false
+            self.spinner.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+            self.spinner.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+            self.spinner.startAnimating()
 
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        spinner.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-
-        spinner.startAnimating()
+        }
     }
 
     func removeSpinner() {

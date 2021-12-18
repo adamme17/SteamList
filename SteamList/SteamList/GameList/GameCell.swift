@@ -60,11 +60,6 @@ class GameCell: UITableViewCell {
 
     private func setupFavouriteButton() {
         contentView.addSubview(favoriteButton)
-        if isFavotite == false {
-            favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
-        } else {
-            favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
-        }
         favoriteButton.tintColor = .orange
         favoriteButton.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
         favoriteButton.clipsToBounds = true

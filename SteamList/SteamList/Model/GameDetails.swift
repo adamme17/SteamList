@@ -120,11 +120,7 @@ import UIKit
 
 // MARK: - Welcome
 struct GameDetails: Codable {
-    let appId: DetailResponse?
-    
-    enum CodingKeys: String, CodingKey {
-        case appId
-    }
+    let appId: [String: DetailResponse]?
 }
 
 // MARK: - The1599830
@@ -146,10 +142,10 @@ struct Details: Codable {
     let legalNotice: String?
     let developers, publishers: [String]?
     let platforms: Platforms?
-   // let categories: [Category]?
+    let categories: [Category]?
     let genres: [Genre]?
     let screenshots: [Screenshot]?
-    //let releaseDate: ReleaseDate?
+    let releaseDate: ReleaseDate?
    // let supportInfo: SupportInfo?
     let background: String?
     
@@ -168,8 +164,8 @@ struct Details: Codable {
         //case pcRequirements = "pc_requirements"
         case legalNotice = "legal_notice"
         case developers, publishers
-        case platforms, genres, screenshots //, categories
-       // case releaseDate = "release_date"
+        case platforms, genres, screenshots, categories
+        case releaseDate = "release_date"
        // case supportInfo = "support_info"
         case background
     }

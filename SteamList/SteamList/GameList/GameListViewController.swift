@@ -109,7 +109,8 @@ extension GameListViewController: UITableViewDataSource {
         let detailController = DetailGameViewController(games: gamesManager,
                                                         storage: storageManager,
                                                         network: networkManager,
-                                                        appId: self.dataSource[indexPath.row].appid)
+                                                        appId: self.dataSource[indexPath.row].appid,
+                                                        name: dataSource[indexPath.row].name, isFavorite: dataSource[indexPath.row].isFavorite)
         self.navigationController?.pushViewController(detailController, animated: true)
     }
 }
