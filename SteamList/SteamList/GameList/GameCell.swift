@@ -35,6 +35,7 @@ class GameCell: UITableViewCell {
     @objc func buttonTapped(sender: UIButton) {
           print("Button was tapped")
         isFavotite.toggle()
+//        CoreDataManager.saveData()
       }
 
     private var cellViewModel: Games?

@@ -15,6 +15,9 @@
 		450C8BE42742539D00549239 /* SteamListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450C8BE32742539D00549239 /* SteamListTests.swift */; };
 		450C8BEE2742539D00549239 /* SteamListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450C8BED2742539D00549239 /* SteamListUITests.swift */; };
 		450C8BF02742539D00549239 /* SteamListUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450C8BEF2742539D00549239 /* SteamListUITestsLaunchTests.swift */; };
+		45213B2E276F837F00CDC0E9 /* GameDetailsDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 45213B2C276F837F00CDC0E9 /* GameDetailsDB.xcdatamodeld */; };
+		45213B31276FB7AF00CDC0E9 /* DetailsItem+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45213B2F276FB7AF00CDC0E9 /* DetailsItem+CoreDataClass.swift */; };
+		45213B32276FB7AF00CDC0E9 /* DetailsItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45213B30276FB7AF00CDC0E9 /* DetailsItem+CoreDataProperties.swift */; };
 		453912D62757AEAC0086C52F /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453912D52757AEAC0086C52F /* CoreDataManager.swift */; };
 		454F3739275A029400E4FB6B /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F3738275A029400E4FB6B /* BackgroundView.swift */; };
 		45508C222757DFB600F80485 /* GameItems+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45508C202757DFB600F80485 /* GameItems+CoreDataClass.swift */; };
@@ -79,6 +82,9 @@
 		450C8BE92742539D00549239 /* SteamListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SteamListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		450C8BED2742539D00549239 /* SteamListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteamListUITests.swift; sourceTree = "<group>"; };
 		450C8BEF2742539D00549239 /* SteamListUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteamListUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		45213B2D276F837F00CDC0E9 /* GameDetailsDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GameDetailsDB.xcdatamodel; sourceTree = "<group>"; };
+		45213B2F276FB7AF00CDC0E9 /* DetailsItem+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DetailsItem+CoreDataClass.swift"; sourceTree = "<group>"; };
+		45213B30276FB7AF00CDC0E9 /* DetailsItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DetailsItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		453912D52757AEAC0086C52F /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		454F3738275A029400E4FB6B /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		45508C202757DFB600F80485 /* GameItems+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameItems+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -200,6 +206,8 @@
 				453912D52757AEAC0086C52F /* CoreDataManager.swift */,
 				45508C202757DFB600F80485 /* GameItems+CoreDataClass.swift */,
 				45508C212757DFB600F80485 /* GameItems+CoreDataProperties.swift */,
+				45213B2F276FB7AF00CDC0E9 /* DetailsItem+CoreDataClass.swift */,
+				45213B30276FB7AF00CDC0E9 /* DetailsItem+CoreDataProperties.swift */,
 				4578D8BA275919F9003E6BAE /* DataSaver.swift */,
 				45949A30275F4D750004881C /* StoreManagerProtocol.swift */,
 			);
@@ -291,6 +299,7 @@
 				450C8BD72742539D00549239 /* LaunchScreen.storyboard */,
 				450C8BD52742539D00549239 /* Assets.xcassets */,
 				45B7689C275615FC0001C34A /* GameListDB.xcdatamodeld */,
+				45213B2C276F837F00CDC0E9 /* GameDetailsDB.xcdatamodeld */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -464,7 +473,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45213B2E276F837F00CDC0E9 /* GameDetailsDB.xcdatamodeld in Sources */,
 				45508C222757DFB600F80485 /* GameItems+CoreDataClass.swift in Sources */,
+				45213B32276FB7AF00CDC0E9 /* DetailsItem+CoreDataProperties.swift in Sources */,
 				456A8EE027451D6200875379 /* GameListViewController.swift in Sources */,
 				45949A37275F6CB00004881C /* GameDetails.swift in Sources */,
 				45D94896274E3BB0002724A9 /* DetailNewsViewController.swift in Sources */,
@@ -494,6 +505,7 @@
 				454F3739275A029400E4FB6B /* BackgroundView.swift in Sources */,
 				45508C232757DFB600F80485 /* GameItems+CoreDataProperties.swift in Sources */,
 				45D94898274E3BB0002724A9 /* NewsViewController.swift in Sources */,
+				45213B31276FB7AF00CDC0E9 /* DetailsItem+CoreDataClass.swift in Sources */,
 				45D94897274E3BB0002724A9 /* FavoritesViewController.swift in Sources */,
 				45BAE3782767EE7C00C9D832 /* FavoriteButton.swift in Sources */,
 				4578D8BB275919F9003E6BAE /* DataSaver.swift in Sources */,
@@ -879,6 +891,16 @@
 			);
 			currentVersion = 450C8BD32742539C00549239 /* SteamList.xcdatamodel */;
 			path = SteamList.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		45213B2C276F837F00CDC0E9 /* GameDetailsDB.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				45213B2D276F837F00CDC0E9 /* GameDetailsDB.xcdatamodel */,
+			);
+			currentVersion = 45213B2D276F837F00CDC0E9 /* GameDetailsDB.xcdatamodel */;
+			path = GameDetailsDB.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

@@ -31,6 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let store: StoreManagerProtocol = CoreDataManager()
         let gameVC = GameListViewController(games: games, storage: store, network: network)
         gameVC.navigationItem.title = "Games"
+        let gamesNavController = UINavigationController(rootViewController: gameVC)
         let favoritesVC = FavoritesViewController()
         let newsVC = NewsViewController()
         
@@ -41,7 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         favoritesVC.title = "Favs"
         newsVC.title = "News"
 
-        tabBarController.setViewControllers([gameVC, favoritesVC, newsVC], animated: true)
+        tabBarController.setViewControllers([gamesNavController, favoritesVC, newsVC], animated: true)
 
         guard let items = tabBarController.tabBar.items else { return UINavigationController() }
 

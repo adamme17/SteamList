@@ -17,6 +17,8 @@ class DetailGameViewController: UIViewController {
     var gamesManager: GamesManagerProtocol
     let storageManager: StoreManagerProtocol
     let networkManager: NetworkManagerProtocol
+    var gamesStorage = [Details]()
+    var dataSource = [Details]()
     
     init (games: GamesManagerProtocol, storage: StoreManagerProtocol, network: NetworkManagerProtocol, appId: Int, name: String, isFavorite: Bool) {
         self.gamesManager = games
@@ -54,13 +56,20 @@ class DetailGameViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         self.title = name
         let gamesList = storageManager.fetchAllData()
+        if gamesList.isEmpty {
+            loadEventsPage()
+        } else {
+//            dataSource += gamesList
+//            gamesStorage += gamesList
+        }
     }
     
     override func viewDidLoad() {
         safeArea = view.layoutMarginsGuide
         super.viewDidLoad()
-        detailView = DetailGameView()
-        setupUI()
+        detailView.scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*100)
+//        detailView = DetailGameView()
+//        setupUI()
         loadEventsPage()
     }
     
@@ -69,6 +78,7 @@ class DetailGameViewController: UIViewController {
         detailView.translatesAutoresizingMaskIntoConstraints = false
         detailView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
         detailView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+//        detailView.scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*100)
     }
 }
 
