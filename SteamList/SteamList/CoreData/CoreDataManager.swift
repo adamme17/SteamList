@@ -61,7 +61,10 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         _ = dataForSaving.map {self.createEntityFrom(games: $0)}
         saveData()
     }
-
+    func prepareDetails(dataForSaving: [Details]) {
+        _ = dataForSaving.map {self.createDetailsEntityFrom(details: $0)}
+        saveData()
+    }
     internal func createEntityFrom(games: Games) -> GameItems? {
         let gameItem = GameItems(context: self.managedObjectContext)
         gameItem.appid = games.appid
@@ -69,6 +72,26 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         gameItem.isFavorite = games.isFavorite
 
         return gameItem
+    }
+    
+    internal func createDetailsEntityFrom(details: Details) -> GameDetails? {
+        let gameDetails = GameDetails(context: self.managedObjectContext)
+        gameDetails.comingSoon = details.releaseDate?.comingSoon ?? false
+        gameDetails.isFree = details.isFree ?? false
+        gameDetails.linux = details.platforms?.linux ?? false
+        gameDetails.mac = details.platforms?.mac ?? false
+        gameDetails.windows = details.platforms?.windows ?? false
+        gameDetails.date = details.releaseDate?.date ?? ""
+        gameDetails.finalFormatted = details.priceOverview?.finalFormatted
+        gameDetails.genreDescription = details.genres?.description
+        gameDetails.headerImage = details.headerImage
+        gameDetails.name = details.name
+        gameDetails.shortDescript = details.shortDescript
+        gameDetails.type = details.type
+        gameDetails.discountPercent = Int64(details.priceOverview!.discountPercent)
+        gameDetails.steamAppid = Int64(details.steamAppid!)
+
+        return gameDetails
     }
 
     func saveData() {
@@ -112,6 +135,22 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         } catch {
             print(error.localizedDescription)
             return []
+        }
+    }
+    
+    func markAsFavorite(by id: Int) {
+        var fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "GameItems")
+        fetchRequest.predicate = NSPredicate(format: "appid=%@", id)
+        do {
+            if let fetchResult = try managedObjectContext.fetch(fetchRequest) as? [NSManagedObject] {
+                if !fetchResult.isEmpty {
+                    fetchResult.forEach { element in
+                        element.managedObjectContext?.setValue(true, forKey: "isFavorite")
+                    }
+                }
+            }
+        } catch let error {
+            print(error.localizedDescription)
         }
     }
     

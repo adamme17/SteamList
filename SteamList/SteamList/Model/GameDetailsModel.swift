@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 
-struct GameDetails: Codable {
+struct GameDetailsModel: Codable {
     let appId: [String: DetailResponse]?
 }
 

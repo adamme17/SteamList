@@ -19,6 +19,7 @@ class DetailGameViewController: UIViewController {
     let networkManager: NetworkManagerProtocol
     var gamesStorage = [Details]()
     var dataSource = [Details]()
+    let coreDataManager = CoreDataManager()
     
     init (games: GamesManagerProtocol, storage: StoreManagerProtocol, network: NetworkManagerProtocol, appId: Int, name: String, isFavorite: Bool) {
         self.gamesManager = games
@@ -38,7 +39,7 @@ class DetailGameViewController: UIViewController {
         view = detailView
     }
     
-    func loadEventsPage() {
+    func loadDetailsPage() {
         gamesManager.getGameDetails(endPoint: .getGameDetailsList(appId: appId)) { [unowned self] result in
             switch result {
             case .success(let model):
@@ -46,6 +47,9 @@ class DetailGameViewController: UIViewController {
                     return
                 }
                 self.games = model
+                if let gameData = model.data {
+                    coreDataManager.prepareDetails(dataForSaving: [gameData])
+                }
                 detailView.setupData(games: model, appId: String(appId))
             case .failure(let error):
                 print(error.localizedDescription)
@@ -57,7 +61,7 @@ class DetailGameViewController: UIViewController {
         self.title = name
         let gamesList = storageManager.fetchAllData()
         if gamesList.isEmpty {
-            loadEventsPage()
+            loadDetailsPage()
         } else {
 //            dataSource += gamesList
 //            gamesStorage += gamesList
@@ -70,7 +74,7 @@ class DetailGameViewController: UIViewController {
         detailView.scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*100)
 //        detailView = DetailGameView()
 //        setupUI()
-        loadEventsPage()
+        loadDetailsPage()
     }
     
     func setupUI() {

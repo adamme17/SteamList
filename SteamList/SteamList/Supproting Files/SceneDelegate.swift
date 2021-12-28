@@ -18,14 +18,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let window = UIWindow(windowScene: scene)
         let rootViewController = viewController()
-        rootViewController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+//        rootViewController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
         window.rootViewController = rootViewController
         window.makeKeyAndVisible()
         self.window = window
     }
 
-    func viewController() -> UINavigationController {
+    func viewController() -> UIViewController {
         let network: NetworkManagerProtocol = NetworkManager()
         let games: GamesManagerProtocol = GamesManager(network: network)
         let store: StoreManagerProtocol = CoreDataManager()
@@ -39,6 +39,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabBarController.delegate = self
 
         gameVC.title = "Games"
+        //gameVC.navigationItem.titleView.t titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        
         favoritesVC.title = "Favs"
         newsVC.title = "News"
 
@@ -53,21 +55,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         tabBarController.tabBar.tintColor = .systemBlue
         
-        return UINavigationController(rootViewController: tabBarController)
+        return tabBarController
     }
 }
 
 extension SceneDelegate: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        switch viewController {
-        case is GameListViewController:
-            tabBarController.title = "Games"
-        case is FavoritesViewController:
-            tabBarController.title = "Favorites"
-        case is NewsViewController:
-            tabBarController.title = "News"
-        default:
-            break
-        }
+//        switch viewController {
+//        case is GameListViewController:
+//            tabBarController.title = "Games"
+//        case is FavoritesViewController:
+//            tabBarController.title = "Favorites"
+//        case is NewsViewController:
+//           // tabBarController.title = "News"
+//        default:
+//            break
+//        }
     }
 }

@@ -161,23 +161,23 @@ final class DetailGameView: BackgroundView {
             make.height.equalTo(50)
             make.top.equalTo(genreLabel.snp.bottom).offset(10)
         }
-        appleImage.snp.makeConstraints { make in
-            make.top.equalTo(genreLabel.snp.bottom).offset(10)
-            make.height.equalTo(50)
-            make.width.equalTo(20)
-            make.trailing.equalTo(windowsImage).inset(20)
-        }
         linuxImage.snp.makeConstraints { make in
-            make.top.equalTo(genreLabel.snp.bottom).offset(10)
-            make.height.equalTo(50)
-            make.width.equalTo(20)
-            make.trailing.equalToSuperview().inset(30)
+            make.top.equalTo(genreLabel.snp.bottom).offset(20)
+            make.height.equalTo(25)
+            make.width.equalTo(25)
+            make.trailing.equalToSuperview().inset(20)
         }
         windowsImage.snp.makeConstraints { make in
-            make.top.equalTo(genreLabel.snp.bottom).offset(10)
-            make.height.equalTo(50)
-            make.width.equalTo(20)
-            make.trailing.equalTo(linuxImage).inset(30)
+            make.centerY.equalTo(linuxImage)
+            make.height.equalTo(25)
+            make.width.equalTo(25)
+            make.trailing.equalTo(linuxImage).inset(35)
+        }
+        appleImage.snp.makeConstraints { make in
+            make.centerY.equalTo(linuxImage)
+            make.height.equalTo(25)
+            make.width.equalTo(25)
+            make.trailing.equalTo(windowsImage).inset(35)
         }
         horizontalLine.snp.makeConstraints { make in
             make.top.equalTo(priceLabel.snp.bottom).offset(15)
@@ -248,6 +248,7 @@ final class DetailGameView: BackgroundView {
         if (games.data?.releaseDate?.comingSoon == true) {
             DispatchQueue.main.async {
                 self.releaseDateLabel.text = "Coming soon"
+                self.priceLabel.isHidden = true
             }
         }
         if (games.data?.isFree != true && games.data?.priceOverview?.discountPercent == 0) {
@@ -260,23 +261,29 @@ final class DetailGameView: BackgroundView {
             }
         }
         if (games.data?.isFree != true && games.data?.priceOverview?.discountPercent != 0) {
-            DispatchQueue.main.async {
-                self.priceLabel.text = "\(games.data?.priceOverview?.finalFormatted) (-\(games.data?.priceOverview?.discountPercent)%)"
+            if let percent = games.data?.priceOverview?.discountPercent,
+               let price = games.data?.priceOverview?.finalFormatted {
+                DispatchQueue.main.async {
+                    self.priceLabel.text = "\(price) (-\(percent)%)"
+                }
             }
         }
-        if (games.data?.platforms?.mac == true) {
+        if let mac = games.data?.platforms?.mac {
             DispatchQueue.main.async {
-                self.appleImage = UIImageView(image: UIImage(named: "apple_icon"))
+                self.appleImage.image = UIImage(named: "apple_icon")
+                self.appleImage.contentMode = .scaleAspectFit
             }
         }
-        if (games.data?.platforms?.windows == true) {
+        if let windows = games.data?.platforms?.windows {
             DispatchQueue.main.async {
-                self.windowsImage = UIImageView(image: UIImage(named: "windows_icon"))
+                self.windowsImage.image = UIImage(named: "windows_icon")
+                self.windowsImage.contentMode = .scaleAspectFit
             }
         }
-        if (games.data?.platforms?.linux == true) {
+        if let linux = games.data?.platforms?.linux {
             DispatchQueue.main.async {
-                self.linuxImage = UIImageView(image: UIImage(named: "linux_icon"))
+                self.linuxImage.image = UIImage(named: "linux_icon")
+                self.linuxImage.contentMode = .scaleAspectFit
             }
         }
         
