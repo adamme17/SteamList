@@ -28,7 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func viewController() -> UIViewController {
         let network: NetworkManagerProtocol = NetworkManager()
         let games: GamesManagerProtocol = GamesManager(network: network)
-        let store: StoreManagerProtocol = CoreDataManager()
+        let store: StoreManagerProtocol = CoreDataManager.shared()
         let gameVC = GameListViewController(games: games, storage: store, network: network)
         gameVC.navigationItem.title = "Games"
         let gamesNavController = UINavigationController(rootViewController: gameVC)

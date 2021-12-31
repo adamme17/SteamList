@@ -29,6 +29,7 @@ final class DetailGameView: BackgroundView {
     var lastImageView: UIImageView?
     var scrollView = UIScrollView()
     var contentView = UIView()
+    let storageManager = CoreDataManager.shared()
 //    var contentStackView = UIStackView()
     
     var isFavorite: Bool = false {
@@ -43,6 +44,7 @@ final class DetailGameView: BackgroundView {
                     pointSize: 25, weight: .medium, scale: .default)
                 let image = UIImage(systemName: "star.fill", withConfiguration: config)
                 isFavoriteButton.setImage(image, for: .normal)
+                storageManager.markAsFavorite(by: Int(appId) ?? 0)
             }
         }
     }
@@ -69,6 +71,9 @@ final class DetailGameView: BackgroundView {
     
     private func setupConstraints() {
 //        contentView.addSubview(contentStackView)
+        self.addSubview(scrollView)
+        scrollView.isScrollEnabled = true
+        scrollView.showsVerticalScrollIndicator = true
         scrollView.addSubview(contentView)
         contentView.addSubview(headerImage)
         contentView.addSubview(nameLabel)
@@ -81,10 +86,6 @@ final class DetailGameView: BackgroundView {
         contentView.addSubview(linuxImage)
         contentView.addSubview(horizontalLine)
         contentView.addSubview(descrptionLabel)
-        
-        self.addSubview(scrollView)
-        scrollView.isScrollEnabled = true
-        scrollView.showsVerticalScrollIndicator = true
         
         nameLabel.textColor = .white
         nameLabel.font = UIFont.boldSystemFont(ofSize: 25.0)
@@ -122,16 +123,25 @@ final class DetailGameView: BackgroundView {
         scrollView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.width.equalToSuperview()
+//            make.height.equalToSuperview()
             make.centerX.equalToSuperview()
+//            make.centerY.equalToSuperview()
         }
         contentView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(scrollView)
-            make.width.equalTo(scrollView)
-            make.centerX.equalTo(scrollView)
+            make.top.bottom.equalTo(self.scrollView)
+            make.left.right.equalToSuperview()
+            make.width.equalTo(self.scrollView)
+            make.height.equalTo(self.scrollView)
+//            make.top.bottom.equalTo(scrollView)
+//            make.width.equalTo(scrollView)
+//            make.height.equalTo(scrollView)
+//            make.centerX.equalTo(scrollView)
+//            make.centerY.equalTo(scrollView)
         }
         headerImage.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(safeAreaLayoutGuide.snp.top)
+//            make.top.equalTo(safeAreaLayoutGuide.snp.top)
+            make.top.equalTo(contentView)
             make.height.equalTo(nameLabel.snp.width).multipliedBy(0.5)
         }
         nameLabel.snp.makeConstraints { make in
@@ -181,14 +191,14 @@ final class DetailGameView: BackgroundView {
         }
         horizontalLine.snp.makeConstraints { make in
             make.top.equalTo(priceLabel.snp.bottom).offset(15)
-            make.leading.equalToSuperview().offset(10)
-            make.trailing.equalToSuperview().offset(-10)
+            make.leading.equalTo(contentView).offset(10)
+            make.trailing.equalTo(contentView).offset(-10)
             make.height.equalTo(1)
         }
         descrptionLabel.snp.makeConstraints { make in
             make.top.equalTo(horizontalLine.snp.bottom).offset(20)
-            make.leading.equalToSuperview().offset(10)
-            make.trailing.equalToSuperview().offset(-10)
+            make.leading.equalTo(contentView).offset(10)
+            make.trailing.equalTo(contentView).offset(-10)
             make.height.greaterThanOrEqualTo(100)
         }
     }
@@ -201,37 +211,38 @@ final class DetailGameView: BackgroundView {
                 let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tappedScreenshot(handler:)))
                 screenshotImageView.addGestureRecognizer(tapGesture)
                 self.screenshotsViews.append(screenshotImageView)
+                
                 contentView.addSubview(screenshotImageView)
                 screenshotImageView.snp.makeConstraints { make in
                     if let lastImageView = self.lastImageView {
                         make.top.equalTo(lastImageView.snp.bottom).offset(5)
                     } else {
-                        make.top.equalTo(self.descrptionLabel.snp.bottom).offset(20)
+                        make.top.equalTo(descrptionLabel.snp.bottom).offset(20)
                     }
                     make.leading.equalToSuperview().offset(10)
                     make.trailing.equalToSuperview().offset(-10)
                     make.height.equalTo(self.snp.width).multipliedBy(0.5)
-                    if count == numbers - 1 {
-                        make.bottom.equalToSuperview()
+                    if count == numbers {
+                        make.bottom.equalTo(scrollView)
                     }
                 }
                 self.lastImageView = screenshotImageView
         }
-        self.layoutIfNeeded()
-        self.layoutSubviews()
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*100)
+//        self.layoutIfNeeded()
+//        self.layoutSubviews()
+//        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*100)
     }
     
-    func setupData(games: DetailResponse, appId: String) {
+    func setupData(games: Details, appId: String) {
         self.appId = appId
-        if let url = URL(string: games.data?.headerImage ?? "") {
+        if let url = URL(string: games.headerImage ?? "") {
             DispatchQueue.main.async {
                 self.headerImage.loadImage(from: url)
-                self.nameLabel.text = games.data?.name
-                self.descrptionLabel.text = games.data?.shortDescript
+                self.nameLabel.text = games.name
+                self.descrptionLabel.text = games.shortDescript
             }
         }
-        if let genres = games.data?.genres {
+        if let genres = games.genres {
             var genresString = ""
             for genre in genres {
                 genresString += "\(genre.genreDescription ?? "")       "
@@ -240,54 +251,54 @@ final class DetailGameView: BackgroundView {
                 self.genreLabel.text = genresString
             }
         }
-        if (games.data?.releaseDate?.comingSoon == false) {
+        if (games.releaseDate?.comingSoon == false) {
             DispatchQueue.main.async {
-                self.releaseDateLabel.text = games.data?.releaseDate?.date
+                self.releaseDateLabel.text = games.releaseDate?.date
             }
         }
-        if (games.data?.releaseDate?.comingSoon == true) {
+        if (games.releaseDate?.comingSoon == true) {
             DispatchQueue.main.async {
                 self.releaseDateLabel.text = "Coming soon"
                 self.priceLabel.isHidden = true
             }
         }
-        if (games.data?.isFree != true && games.data?.priceOverview?.discountPercent == 0) {
+        if (games.isFree != true && games.priceOverview?.discountPercent == 0) {
             DispatchQueue.main.async {
-                self.priceLabel.text = games.data?.priceOverview?.finalFormatted
+                self.priceLabel.text = games.priceOverview?.finalFormatted
             }
         } else {
             DispatchQueue.main.async {
                 self.priceLabel.text = "Free to Play"
             }
         }
-        if (games.data?.isFree != true && games.data?.priceOverview?.discountPercent != 0) {
-            if let percent = games.data?.priceOverview?.discountPercent,
-               let price = games.data?.priceOverview?.finalFormatted {
+        if (games.isFree != true && games.priceOverview?.discountPercent != 0) {
+            if let percent = games.priceOverview?.discountPercent,
+               let price = games.priceOverview?.finalFormatted {
                 DispatchQueue.main.async {
                     self.priceLabel.text = "\(price) (-\(percent)%)"
                 }
             }
         }
-        if let mac = games.data?.platforms?.mac {
+        if let mac = games.platforms?.mac {
             DispatchQueue.main.async {
                 self.appleImage.image = UIImage(named: "apple_icon")
                 self.appleImage.contentMode = .scaleAspectFit
             }
         }
-        if let windows = games.data?.platforms?.windows {
+        if let windows = games.platforms?.windows {
             DispatchQueue.main.async {
                 self.windowsImage.image = UIImage(named: "windows_icon")
                 self.windowsImage.contentMode = .scaleAspectFit
             }
         }
-        if let linux = games.data?.platforms?.linux {
+        if let linux = games.platforms?.linux {
             DispatchQueue.main.async {
                 self.linuxImage.image = UIImage(named: "linux_icon")
                 self.linuxImage.contentMode = .scaleAspectFit
             }
         }
         
-        if let screens = games.data?.screenshots {
+        if let screens = games.screenshots {
             var screenUrl = ""
             DispatchQueue.main.async {
                 self.setupScreenShotImageViews(numbers: screens.count)

@@ -19,7 +19,7 @@ class DetailGameViewController: UIViewController {
     let networkManager: NetworkManagerProtocol
     var gamesStorage = [Details]()
     var dataSource = [Details]()
-    let coreDataManager = CoreDataManager()
+    let coreDataManager = CoreDataManager.shared()
     
     init (games: GamesManagerProtocol, storage: StoreManagerProtocol, network: NetworkManagerProtocol, appId: Int, name: String, isFavorite: Bool) {
         self.gamesManager = games
@@ -49,8 +49,8 @@ class DetailGameViewController: UIViewController {
                 self.games = model
                 if let gameData = model.data {
                     coreDataManager.prepareDetails(dataForSaving: [gameData])
+                    detailView.setupData(games: gameData, appId: String(appId))
                 }
-                detailView.setupData(games: model, appId: String(appId))
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -59,12 +59,18 @@ class DetailGameViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.title = name
-        let gamesList = storageManager.fetchAllData()
-        if gamesList.isEmpty {
-            loadDetailsPage()
-        } else {
-//            dataSource += gamesList
-//            gamesStorage += gamesList
+        let group = DispatchGroup()
+        var gamesList = [Details]()
+        DispatchQueue.main.async(group: group) { [self] in
+            gamesList += storageManager.fetchGameDetail(id: self.appId)
+        }
+        group.notify(queue: .main) { [self] in
+//            if gamesList.isEmpty {
+                loadDetailsPage()
+//            } else {
+//                guard let game = gamesList.first(where: {$0.steamAppid == self.appId}) else {return}
+//                detailView.setupData(games: game, appId: String(appId))
+//            }
         }
     }
     
@@ -72,9 +78,6 @@ class DetailGameViewController: UIViewController {
         safeArea = view.layoutMarginsGuide
         super.viewDidLoad()
         detailView.scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*100)
-//        detailView = DetailGameView()
-//        setupUI()
-        loadDetailsPage()
     }
     
     func setupUI() {

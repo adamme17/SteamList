@@ -27,7 +27,7 @@ struct Details: Codable {
     let supportedLanguages: String?
     let headerImage: String?
     let website: String?
-   // let pcRequirements: PCRequirements?
+    // let pcRequirements: PCRequirements?
     let legalNotice: String?
     let developers, publishers: [String]?
     let priceOverview: Price?
@@ -36,7 +36,7 @@ struct Details: Codable {
     let genres: [Genre]?
     let screenshots: [Screenshot]?
     let releaseDate: ReleaseDate?
-   // let supportInfo: SupportInfo?
+    // let supportInfo: SupportInfo?
     let background: String?
     
     enum CodingKeys: String, CodingKey {
@@ -57,7 +57,7 @@ struct Details: Codable {
         case priceOverview = "price_overview"
         case platforms, genres, screenshots, categories
         case releaseDate = "release_date"
-       // case supportInfo = "support_info"
+        // case supportInfo = "support_info"
         case background
     }
 }
@@ -86,16 +86,16 @@ struct Genre: Codable {
 // MARK: - Price
 struct Price: Codable {
     let currency: String
-        let initial, priceOverviewFinal, discountPercent: Int
-        let initialFormatted, finalFormatted: String
-
-        enum CodingKeys: String, CodingKey {
-            case currency, initial
-            case priceOverviewFinal = "final"
-            case discountPercent = "discount_percent"
-            case initialFormatted = "initial_formatted"
-            case finalFormatted = "final_formatted"
-        }
+    let initial, priceOverviewFinal, discountPercent: Int
+    let initialFormatted, finalFormatted: String
+    
+    enum CodingKeys: String, CodingKey {
+        case currency, initial
+        case priceOverviewFinal = "final"
+        case discountPercent = "discount_percent"
+        case initialFormatted = "initial_formatted"
+        case finalFormatted = "final_formatted"
+    }
 }
 
 // MARK: - PCRequirements
