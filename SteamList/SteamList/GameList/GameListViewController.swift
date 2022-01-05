@@ -43,7 +43,7 @@ class GameListViewController: UIViewController {
                         self.gamesStorage.append(game)
                     }
                 }
-                self.storageManager.storeDataAsync(data: self.dataSource)
+                self.storageManager.prepare(dataForSaving: self.dataSource)
                 DispatchQueue.main.async {
                     self.listView.tableView.reloadData()
                 }

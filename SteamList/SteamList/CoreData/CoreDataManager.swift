@@ -45,14 +45,19 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
     }
     // MARK: - Core Data stack
     
-    lazy var managedObjectContext = {
-        
+    lazy var managedObjectContext: NSManagedObjectContext = {
+        //        self.persistentContainer.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
         return self.persistentContainer.viewContext
     }()
     
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "GameListDB")
+        let description = NSPersistentStoreDescription()
+        description.shouldMigrateStoreAutomatically = true
+        description.shouldInferMappingModelAutomatically = true
+        container.persistentStoreDescriptions = [description]
         container.loadPersistentStores(completionHandler: { (_, error) in
+            container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
@@ -67,6 +72,21 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
     
     func prepareDetails(dataForSaving: [Details]) {
         _ = dataForSaving.map {self.createDetailsEntityFrom(details: $0)}
+        saveData()
+    }
+    
+    func prepareFavorites(dataForSaving: [Details]) {
+        _ = dataForSaving.map {self.createFavoritesEntityFrom(details: $0)}
+        saveData()
+    }
+    
+    func prepareGenres(dataForSaving: Details) {
+        _ = dataForSaving.genres?.compactMap {self.createGenereDescriptionFrom(genre: $0, appid: dataForSaving.steamAppid ?? 0)}
+        saveData()
+    }
+    
+    func prepareScreens(dataForSaving: Details) {
+        _ = dataForSaving.screenshots?.compactMap {self.createScreensFrom(screen: $0, appid: dataForSaving.steamAppid ?? 0)}
         saveData()
     }
     
@@ -88,7 +108,7 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         gameDetails.windows = details.platforms?.windows ?? false
         gameDetails.date = details.releaseDate?.date ?? ""
         gameDetails.finalFormatted = details.priceOverview?.finalFormatted
-        gameDetails.genreDescription = details.genres?.description
+        //        gameDetails.genreDescription = details.genres?.description
         gameDetails.headerImage = details.headerImage
         gameDetails.name = details.name
         gameDetails.shortDescript = details.shortDescript
@@ -97,6 +117,35 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         gameDetails.steamAppid = Int64(details.steamAppid ?? 0)
         
         return gameDetails
+    }
+    
+    func createGenereDescriptionFrom(genre: Genre, appid: Int) -> Genres? {
+        let genres = Genres(context: self.managedObjectContext)
+        genres.appid = Int64(appid)
+        genres.genreid = Int64(genre.id ?? "") ?? 0
+        genres.genreDescription = genre.genreDescription ?? ""
+        
+        return genres
+    }
+    
+    func createScreensFrom(screen: Screenshot, appid: Int) -> Screens? {
+        let screens = Screens(context: self.managedObjectContext)
+        screens.appid = Int64(appid)
+        screens.screenid = Int64(screen.id ?? 0)
+        screens.pathFull = screen.pathFull ?? ""
+        
+        return screens
+    }
+    
+    internal func createFavoritesEntityFrom(details: Details) -> FavoriteGames {
+        let favorites = FavoriteGames(context: self.managedObjectContext)
+        favorites.isFree = details.isFree ?? false
+        favorites.finalFormatted = details.priceOverview?.finalFormatted
+        favorites.name = details.name
+        favorites.discountPercent = Int64(details.priceOverview?.discountPercent ?? 0)
+        favorites.id = Int64(details.steamAppid ?? 0)
+        
+        return favorites
     }
     
     func saveData() {
@@ -147,20 +196,52 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         return result
     }
     
-    func fetchGameDetail(id: Int) -> [Details] {
+    func fetchGameDetail(id: Int) -> Details? {
         var result = [Details]()
-        
-        self.storeQueue.addOperation {
+        var screens = [Screenshot]()
+        var genres = [Genre]()
+        self.storeQueue.maxConcurrentOperationCount = 2
+        let screensOperation = BlockOperation {
+            let fetchRequest: NSFetchRequest<Screens> = Screens.fetchRequest()
+            do {
+                let context = self.persistentContainer.viewContext
+                let objects = try context.fetch(fetchRequest)
+                let fetchResult = objects.compactMap { screen -> Screenshot in
+                    return Screenshot(id: Int(screen.appid),
+                                      pathThumbnail: nil,
+                                      pathFull: screen.pathFull ?? "")
+                }
+                screens += fetchResult.filter { $0.id == id }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        let genresOperation = BlockOperation {
+            let fetchRequest: NSFetchRequest<Genres> = Genres.fetchRequest()
+            do {
+                let context = self.persistentContainer.viewContext
+                let objects = try context.fetch(fetchRequest)
+                let fetchResult = objects.compactMap { genre -> Genre in
+                    return Genre(id: String(genre.appid),
+                                 genreDescription: genre.genreDescription ?? "")
+                }
+                genres += fetchResult.filter { Int($0.id ?? "0") == id }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        let detailsOperation = BlockOperation {
             
             let fetchRequest: NSFetchRequest<GameDetails> = GameDetails.fetchRequest()
-            //            var fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "GameDetails")
-            //        fetchRequest.predicate = NSPredicate(format: "steamAppid LIKE %@", id)
             do {
                 
                 
                 let context = self.persistentContainer.viewContext
                 let objects = try context.fetch(fetchRequest)
-                let fetchResult = objects.compactMap { game -> Details in
+                let fetchResult = objects.filter { game -> Bool in
+                    return Int(game.steamAppid) == id
+                }
+                    .compactMap { game -> Details in
                     return Details(type: game.type,
                                    name: game.name,
                                    steamAppid: Int(game.steamAppid),
@@ -183,10 +264,32 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
                                                         finalFormatted: game.finalFormatted ?? ""),
                                    platforms: Platforms(windows: game.windows, mac: game.mac, linux: game.linux),
                                    categories: nil,
-                                   genres: [Genre(id: nil, genreDescription: game.genreDescription)],
-                                   screenshots: [Screenshot(id: nil, pathThumbnail: nil, pathFull: game.pathFull)],
+                                   genres: genres,
+                                   screenshots: screens,
                                    releaseDate: ReleaseDate(comingSoon: game.comingSoon, date: game.date),
                                    background: nil)
+                }
+                result += fetchResult
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        detailsOperation.addDependency(screensOperation)
+        detailsOperation.addDependency(genresOperation)
+        self.storeQueue.addOperations([screensOperation, detailsOperation, genresOperation], waitUntilFinished: true)
+        return result.first(where: { $0.steamAppid == id})
+    }
+    
+    func fetchFavoritesGames() -> [Int] {
+        var result = [Int]()
+        self.storeQueue.addOperation {
+            
+            let fetchRequest: NSFetchRequest<FavoriteGames> = FavoriteGames.fetchRequest()
+            do {
+                let context = self.persistentContainer.viewContext
+                let objects = try context.fetch(fetchRequest)
+                let fetchResult = objects.compactMap { game -> Int in
+                    return Int(game.id)
                 }
                 result += fetchResult
             } catch {
@@ -197,24 +300,25 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         return result
     }
     
-    func markAsFavorite(by id: Int) {
-        self.storeQueue.addOperation {
-            
-            var fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "GameItems")
-            fetchRequest.predicate = NSPredicate(format: "appid=%@", 1213750)
-            do {
-                if let fetchResult = try self.managedObjectContext.fetch(fetchRequest) as? [NSManagedObject] {
-                    if !fetchResult.isEmpty {
-                        fetchResult.forEach { element in
-                            element.managedObjectContext?.setValue(true, forKey: "isFavorite")
-                        }
-                    }
-                }
-            } catch let error {
-                print(error.localizedDescription)
-            }
-        }
-    }
+    
+    //    func markAsFavorite(details: Details) {
+    //        self.storeQueue.addOperation {
+    //
+    //            var fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "GameItems")
+    //            fetchRequest.predicate = NSPredicate(format: "appid=%@", 1213750)
+    //            do {
+    //                if let fetchResult = try self.managedObjectContext.fetch(fetchRequest) as? [NSManagedObject] {
+    //                    if !fetchResult.isEmpty {
+    //                        fetchResult.forEach { element in
+    //                            element.managedObjectContext?.setValue(true, forKey: "isFavorite")
+    //                        }
+    //                    }
+    //                }
+    //            } catch let error {
+    //                print(error.localizedDescription)
+    //            }
+    //        }
+    //    }
     
     func storeDataAsync(data: [Games]) {
         self.storeQueue.addOperation {

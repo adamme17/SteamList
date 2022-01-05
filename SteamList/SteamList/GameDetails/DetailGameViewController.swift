@@ -60,17 +60,16 @@ class DetailGameViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         self.title = name
         let group = DispatchGroup()
-        var gamesList = [Details]()
+        var game: Details?
         DispatchQueue.main.async(group: group) { [self] in
-            gamesList += storageManager.fetchGameDetail(id: self.appId)
+            game = storageManager.fetchGameDetail(id: self.appId)
         }
         group.notify(queue: .main) { [self] in
-//            if gamesList.isEmpty {
+            if game == nil {
                 loadDetailsPage()
-//            } else {
-//                guard let game = gamesList.first(where: {$0.steamAppid == self.appId}) else {return}
-//                detailView.setupData(games: game, appId: String(appId))
-//            }
+            } else {
+                detailView.setupData(games: game!, appId: String(appId))
+            }
         }
     }
     

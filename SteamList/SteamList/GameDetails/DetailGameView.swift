@@ -30,6 +30,7 @@ final class DetailGameView: BackgroundView {
     var scrollView = UIScrollView()
     var contentView = UIView()
     let storageManager = CoreDataManager.shared()
+    var games: Details?
 //    var contentStackView = UIStackView()
     
     var isFavorite: Bool = false {
@@ -43,8 +44,14 @@ final class DetailGameView: BackgroundView {
                 let config = UIImage.SymbolConfiguration(
                     pointSize: 25, weight: .medium, scale: .default)
                 let image = UIImage(systemName: "star.fill", withConfiguration: config)
-                isFavoriteButton.setImage(image, for: .normal)
-                storageManager.markAsFavorite(by: Int(appId) ?? 0)
+                DispatchQueue.main.async {
+                    self.isFavoriteButton.setImage(image, for: .normal)
+                }
+//                storageManager.markAsFavorite(by: Int(appId) ?? 0)
+                guard let games = games else {
+                    return
+                }
+                storageManager.prepareFavorites(dataForSaving: [games])
             }
         }
     }
@@ -235,6 +242,7 @@ final class DetailGameView: BackgroundView {
     
     func setupData(games: Details, appId: String) {
         self.appId = appId
+        self.games = games
         if let url = URL(string: games.headerImage ?? "") {
             DispatchQueue.main.async {
                 self.headerImage.loadImage(from: url)
@@ -312,6 +320,11 @@ final class DetailGameView: BackgroundView {
                 }
             }
             
+        }
+        let favorites = storageManager.fetchFavoritesGames()
+        
+        if favorites.contains(where: { $0 == games.steamAppid }) {
+            isFavorite = true
         }
     }
     func update(state: GameDetailState) {

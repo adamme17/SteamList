@@ -6,32 +6,67 @@
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="isFree" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="GameDetails" representedClassName="GameDetails" syncable="YES">
         <attribute name="comingSoon" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="date" optional="YES" attributeType="String"/>
         <attribute name="discountPercent" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="finalFormatted" optional="YES" attributeType="String"/>
-        <attribute name="genreDescription" optional="YES" attributeType="String"/>
         <attribute name="headerImage" optional="YES" attributeType="String"/>
         <attribute name="isFree" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="linux" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="mac" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="pathFull" optional="YES" attributeType="String"/>
         <attribute name="shortDescript" optional="YES" attributeType="String"/>
         <attribute name="steamAppid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <attribute name="windows" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="steamAppid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="GameItems" representedClassName="GameItems" syncable="YES">
         <attribute name="appid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="isFavorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="appid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Genres" representedClassName="Genres" syncable="YES">
+        <attribute name="appid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="genreDescription" optional="YES" attributeType="String"/>
+        <attribute name="genreid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="genreid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Screens" representedClassName="Screens" syncable="YES">
+        <attribute name="appid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pathFull" optional="YES" attributeType="String"/>
+        <attribute name="screenid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="screenid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <elements>
         <element name="FavoriteGames" positionX="-63" positionY="108" width="128" height="104"/>
-        <element name="GameDetails" positionX="-63" positionY="9" width="128" height="254"/>
+        <element name="GameDetails" positionX="-63" positionY="9" width="128" height="224"/>
         <element name="GameItems" positionX="-63" positionY="-18" width="128" height="74"/>
+        <element name="Screens" positionX="-63" positionY="108" width="128" height="74"/>
+        <element name="Genres" positionX="-54" positionY="108" width="128" height="74"/>
     </elements>
 </model>

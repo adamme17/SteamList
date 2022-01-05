@@ -20,13 +20,11 @@ extension GameDetails {
     @NSManaged public var date: String?
     @NSManaged public var discountPercent: Int64
     @NSManaged public var finalFormatted: String?
-    @NSManaged public var genreDescription: String?
     @NSManaged public var headerImage: String?
     @NSManaged public var isFree: Bool
     @NSManaged public var linux: Bool
     @NSManaged public var mac: Bool
     @NSManaged public var name: String?
-    @NSManaged public var pathFull: String?
     @NSManaged public var shortDescript: String?
     @NSManaged public var steamAppid: Int64
     @NSManaged public var type: String?
