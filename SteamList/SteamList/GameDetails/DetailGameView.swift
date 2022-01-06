@@ -47,7 +47,6 @@ final class DetailGameView: BackgroundView {
                 DispatchQueue.main.async {
                     self.isFavoriteButton.setImage(image, for: .normal)
                 }
-//                storageManager.markAsFavorite(by: Int(appId) ?? 0)
                 guard let games = games else {
                     return
                 }
@@ -313,9 +312,7 @@ final class DetailGameView: BackgroundView {
                 for (key, screens) in screens.enumerated() {
                     let imageView = self.screenshotsViews[key]
                     if let screenUrl = URL(string: screens.pathFull ?? "") {
-                        DispatchQueue.main.async {
-                            imageView.loadImage(from: screenUrl)
-                        }
+                        imageView.loadImage(from: screenUrl)
                     }
                 }
             }

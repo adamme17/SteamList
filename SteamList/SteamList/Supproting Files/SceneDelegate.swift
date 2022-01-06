@@ -32,6 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let gameVC = GameListViewController(games: games, storage: store, network: network)
         gameVC.navigationItem.title = "Games"
         let gamesNavController = UINavigationController(rootViewController: gameVC)
+        gamesNavController.navigationBar.barTintColor = UIColor(red: 48, green: 100, blue: 133)
         let favoritesVC = FavoritesViewController(games: games, storage: store, network: network)
         let newsVC = NewsViewController()
         

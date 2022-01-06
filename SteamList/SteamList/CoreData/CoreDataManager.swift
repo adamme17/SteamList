@@ -46,37 +46,63 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
     // MARK: - Core Data stack
     
     lazy var managedObjectContext: NSManagedObjectContext = {
-        //        self.persistentContainer.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
-        return self.persistentContainer.viewContext
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
+        managedObjectContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        return managedObjectContext
     }()
     
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "GameListDB")
-        let description = NSPersistentStoreDescription()
-        description.shouldMigrateStoreAutomatically = true
-        description.shouldInferMappingModelAutomatically = true
-        container.persistentStoreDescriptions = [description]
-        container.loadPersistentStores(completionHandler: { (_, error) in
-            container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
+    private lazy var managedObjectModel: NSManagedObjectModel = {
+        guard let modelURL = Bundle.main.url(forResource: "GameListDB", withExtension: "momd") else {
+            fatalError("Unable to Find Data Model")
+        }
+        guard let managedObjectModel = NSManagedObjectModel(contentsOf: modelURL) else {
+            fatalError("Unable to Load Data Model")
+        }
+        return managedObjectModel
     }()
     
+    private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
+        let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
+        let fileManager = FileManager.default
+        let storeName = "GameListDB.sqlite"
+        let documentsDirectoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let persistentStoreURL = documentsDirectoryURL.appendingPathComponent(storeName)
+        print(persistentStoreURL)
+        do {
+            let options = [ NSInferMappingModelAutomaticallyOption : true,
+                      NSMigratePersistentStoresAutomaticallyOption : true]
+            try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
+                                                              configurationName: nil,
+                                                              at: persistentStoreURL,
+                                                              options: options)
+        } catch {
+            fatalError("Unable to Load Persistent Store")
+        }
+        return persistentStoreCoordinator
+    }()
+  
     func prepare(dataForSaving: [Games]) {
         _ = dataForSaving.map {self.createEntityFrom(games: $0)}
         saveData()
     }
     
     func prepareDetails(dataForSaving: [Details]) {
-        _ = dataForSaving.map {self.createDetailsEntityFrom(details: $0)}
+        _ = dataForSaving.map {
+            self.createDetailsEntityFrom(details: $0)
+            self.prepareScreens(dataForSaving: $0)
+            self.prepareGenres(dataForSaving: $0)
+        }
         saveData()
     }
     
     func prepareFavorites(dataForSaving: [Details]) {
         _ = dataForSaving.map {self.createFavoritesEntityFrom(details: $0)}
+        saveData()
+    }
+    
+    func prepareFavorites(dataForSaving: [Games]) {
+        _ = dataForSaving.map {self.createFavoritesEntityFrom(game: $0)}
         saveData()
     }
     
@@ -147,6 +173,17 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         
         return favorites
     }
+
+    internal func createFavoritesEntityFrom(game: Games) -> FavoriteGames {
+        let favorites = FavoriteGames(context: self.managedObjectContext)
+        favorites.isFree = false
+        favorites.finalFormatted = ""
+        favorites.name = game.name
+        favorites.discountPercent = 0
+        favorites.id = Int64(game.appid)
+        
+        return favorites
+    }
     
     func saveData() {
         
@@ -161,38 +198,53 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         }
     }
     
-    func saveDataInBackground() {
-        persistentContainer.performBackgroundTask { (context) in
-            if context.hasChanges {
-                do {
-                    try context.save()
-                } catch {
-                    let nserror = error as NSError
-                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-                }
-            }
-        }
-    }
+//    func saveDataInBackground() {
+//        persistentContainer.performBackgroundTask { (context) in
+//            if context.hasChanges {
+//                do {
+//                    try context.save()
+//                } catch {
+//                    let nserror = error as NSError
+//                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+//                }
+//            }
+//        }
+//    }
     
     func fetchAllData() -> [Games] {
         var result = [Games]()
-        self.storeQueue.addOperation { [self] in
+        var favorites = [FavoriteGames]()
+        self.storeQueue.maxConcurrentOperationCount = 2
+        let favoriteOperation = BlockOperation {
+            let fetchRequest: NSFetchRequest<FavoriteGames> = FavoriteGames.fetchRequest()
             do {
-                let fetchRequest: NSFetchRequest<GameItems>
-                fetchRequest = GameItems.fetchRequest()
+                let context = self.managedObjectContext
+                let objects = try context.fetch(fetchRequest)
+                favorites += objects
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        let gameOperation = BlockOperation {
+            
+            let fetchRequest: NSFetchRequest<GameItems> = GameItems.fetchRequest()
+            do {
                 
-                let context = persistentContainer.viewContext
+                
+                let context = self.managedObjectContext
                 let objects = try context.fetch(fetchRequest)
                 let fetchResult = objects.compactMap { game -> Games in
-                    return Games(appId: game.appid,
-                                 name: game.name ?? "")
-                }
+                        return Games(appId: Int(game.appid),
+                                     name: game.name ?? "",
+                                     isFavorite: favorites.contains(where: {Int($0.id) == Int(game.appid)}))
+                    }
                 result += fetchResult
             } catch {
                 print(error.localizedDescription)
             }
         }
-        self.storeQueue.waitUntilAllOperationsAreFinished()
+        gameOperation.addDependency(favoriteOperation)
+        self.storeQueue.addOperations([favoriteOperation, gameOperation], waitUntilFinished: true)
         return result
     }
     
@@ -204,7 +256,7 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         let screensOperation = BlockOperation {
             let fetchRequest: NSFetchRequest<Screens> = Screens.fetchRequest()
             do {
-                let context = self.persistentContainer.viewContext
+                let context = self.managedObjectContext
                 let objects = try context.fetch(fetchRequest)
                 let fetchResult = objects.compactMap { screen -> Screenshot in
                     return Screenshot(id: Int(screen.appid),
@@ -219,7 +271,7 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         let genresOperation = BlockOperation {
             let fetchRequest: NSFetchRequest<Genres> = Genres.fetchRequest()
             do {
-                let context = self.persistentContainer.viewContext
+                let context = self.managedObjectContext
                 let objects = try context.fetch(fetchRequest)
                 let fetchResult = objects.compactMap { genre -> Genre in
                     return Genre(id: String(genre.appid),
@@ -236,39 +288,39 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
             do {
                 
                 
-                let context = self.persistentContainer.viewContext
+                let context = self.managedObjectContext
                 let objects = try context.fetch(fetchRequest)
                 let fetchResult = objects.filter { game -> Bool in
                     return Int(game.steamAppid) == id
                 }
                     .compactMap { game -> Details in
-                    return Details(type: game.type,
-                                   name: game.name,
-                                   steamAppid: Int(game.steamAppid),
-                                   requiredAge: nil,
-                                   isFree: game.isFree,
-                                   controllerSupport: nil,
-                                   detailedDescription: nil,
-                                   aboutTheGame: nil,
-                                   shortDescript: game.shortDescript,
-                                   supportedLanguages: nil,
-                                   headerImage: game.headerImage,
-                                   website: nil,
-                                   legalNotice: nil,
-                                   developers: nil,
-                                   publishers: nil,
-                                   priceOverview: Price(currency: "", initial: 0,
-                                                        priceOverviewFinal: 0,
-                                                        discountPercent: Int(game.discountPercent),
-                                                        initialFormatted: "",
-                                                        finalFormatted: game.finalFormatted ?? ""),
-                                   platforms: Platforms(windows: game.windows, mac: game.mac, linux: game.linux),
-                                   categories: nil,
-                                   genres: genres,
-                                   screenshots: screens,
-                                   releaseDate: ReleaseDate(comingSoon: game.comingSoon, date: game.date),
-                                   background: nil)
-                }
+                        return Details(type: game.type,
+                                       name: game.name,
+                                       steamAppid: Int(game.steamAppid),
+                                       requiredAge: nil,
+                                       isFree: game.isFree,
+                                       controllerSupport: nil,
+                                       detailedDescription: nil,
+                                       aboutTheGame: nil,
+                                       shortDescript: game.shortDescript,
+                                       supportedLanguages: nil,
+                                       headerImage: game.headerImage,
+                                       website: nil,
+                                       legalNotice: nil,
+                                       developers: nil,
+                                       publishers: nil,
+                                       priceOverview: Price(currency: "", initial: 0,
+                                                            priceOverviewFinal: 0,
+                                                            discountPercent: Int(game.discountPercent),
+                                                            initialFormatted: "",
+                                                            finalFormatted: game.finalFormatted ?? ""),
+                                       platforms: Platforms(windows: game.windows, mac: game.mac, linux: game.linux),
+                                       categories: nil,
+                                       genres: genres,
+                                       screenshots: screens,
+                                       releaseDate: ReleaseDate(comingSoon: game.comingSoon, date: game.date),
+                                       background: nil)
+                    }
                 result += fetchResult
             } catch {
                 print(error.localizedDescription)
@@ -286,7 +338,7 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
             
             let fetchRequest: NSFetchRequest<FavoriteGames> = FavoriteGames.fetchRequest()
             do {
-                let context = self.persistentContainer.viewContext
+                let context = self.managedObjectContext
                 let objects = try context.fetch(fetchRequest)
                 let fetchResult = objects.compactMap { game -> Int in
                     return Int(game.id)

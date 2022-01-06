@@ -76,7 +76,16 @@ class DetailGameViewController: UIViewController {
     override func viewDidLoad() {
         safeArea = view.layoutMarginsGuide
         super.viewDidLoad()
+        setupScreenshots()
         detailView.scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*100)
+    }
+    
+    private func setupScreenshots() {
+        detailView.tappedScreenshotCompletion = { [weak self] image in
+            let screenshotController = ScreenshotViewController()
+            screenshotController.image = image
+            self?.navigationController?.pushViewController(screenshotController, animated: true)
+        }
     }
     
     func setupUI() {

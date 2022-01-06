@@ -12,6 +12,8 @@ class GameCell: UITableViewCell {
     var safeArea: UILayoutGuide!
     let nameLabel = UILabel()
     var favoriteButton = UIButton()
+    let storageManager = CoreDataManager.shared()
+    var games: Details?
     
     var isFavotite: Bool = false {
         didSet {
@@ -19,6 +21,8 @@ class GameCell: UITableViewCell {
                 favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
             } else {
                 favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+                guard let games = cellViewModel else { return }
+                storageManager.prepareFavorites(dataForSaving: [games])
             }
         }
     }
@@ -71,6 +75,11 @@ class GameCell: UITableViewCell {
             constraints.leading.greaterThanOrEqualTo(nameLabel.snp.trailing).offset(10)
             constraints.width.greaterThanOrEqualTo(20)
         }
+//        let favorites = storageManager.fetchFavoritesGames()
+//
+//        if favorites.contains(where: { $0 == games?.steamAppid }) {
+//            isFavotite = true
+//        }
     }
 
     func setupModel(model: Games) {

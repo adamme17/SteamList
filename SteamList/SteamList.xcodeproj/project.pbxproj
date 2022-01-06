@@ -218,17 +218,8 @@
 		453912D027579D850086C52F /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				458C5C5327863A7200C87FD5 /* Genres+CoreDataClass.swift */,
-				458C5C5427863A7200C87FD5 /* Genres+CoreDataProperties.swift */,
-				458C5C4D2786372900C87FD5 /* Screens+CoreDataClass.swift */,
-				458C5C4E2786372900C87FD5 /* Screens+CoreDataProperties.swift */,
+				45B40189278706B6001DA133 /* Models */,
 				453912D52757AEAC0086C52F /* CoreDataManager.swift */,
-				452F8EBD27859C8100C6A2FA /* FavoriteGames+CoreDataClass.swift */,
-				452F8EBE27859C8100C6A2FA /* FavoriteGames+CoreDataProperties.swift */,
-				45508C202757DFB600F80485 /* GameItems+CoreDataClass.swift */,
-				45508C212757DFB600F80485 /* GameItems+CoreDataProperties.swift */,
-				45287ED0277B3EB500580FE1 /* GameDetails+CoreDataClass.swift */,
-				45287ED1277B3EB500580FE1 /* GameDetails+CoreDataProperties.swift */,
 				4578D8BA275919F9003E6BAE /* DataSaver.swift */,
 				45949A30275F4D750004881C /* StoreManagerProtocol.swift */,
 			);
@@ -268,6 +259,23 @@
 				454F3738275A029400E4FB6B /* BackgroundView.swift */,
 			);
 			path = "Supproting Files";
+			sourceTree = "<group>";
+		};
+		45B40189278706B6001DA133 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				458C5C5327863A7200C87FD5 /* Genres+CoreDataClass.swift */,
+				458C5C5427863A7200C87FD5 /* Genres+CoreDataProperties.swift */,
+				458C5C4D2786372900C87FD5 /* Screens+CoreDataClass.swift */,
+				458C5C4E2786372900C87FD5 /* Screens+CoreDataProperties.swift */,
+				452F8EBD27859C8100C6A2FA /* FavoriteGames+CoreDataClass.swift */,
+				452F8EBE27859C8100C6A2FA /* FavoriteGames+CoreDataProperties.swift */,
+				45508C202757DFB600F80485 /* GameItems+CoreDataClass.swift */,
+				45508C212757DFB600F80485 /* GameItems+CoreDataProperties.swift */,
+				45287ED0277B3EB500580FE1 /* GameDetails+CoreDataClass.swift */,
+				45287ED1277B3EB500580FE1 /* GameDetails+CoreDataProperties.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		45B76899275412930001C34A /* FavoritesList */ = {
