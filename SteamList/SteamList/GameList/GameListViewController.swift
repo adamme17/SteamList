@@ -43,7 +43,7 @@ class GameListViewController: UIViewController {
                         self.gamesStorage.append(game)
                     }
                 }
-                self.storageManager.storeDataAsync(data: self.dataSource)
+                self.storageManager.prepare(dataForSaving: self.dataSource)
                 DispatchQueue.main.async {
                     self.listView.tableView.reloadData()
                 }
@@ -59,8 +59,11 @@ class GameListViewController: UIViewController {
         if gamesList.isEmpty {
             loadEventsPage()
         } else {
-            dataSource += gamesList
-            gamesStorage += gamesList
+            dataSource = gamesList
+            gamesStorage = gamesList
+            DispatchQueue.main.async {
+                self.listView.tableView.reloadData()
+            }
         }
     }
     
@@ -72,15 +75,9 @@ class GameListViewController: UIViewController {
         listView.tableView.dataSource = self
         listView.tableView.delegate = self
         listView.tableView.register(GameCell.self, forCellReuseIdentifier: "cellId")
-        refreshData()
-    }
-    func refreshData() {
-        //        let data =
-        //        let state = GameListState(title: data.title, color: data.color)
-        //        listView.updateState(state: state)
     }
     
-// MARK: - Setup View
+    // MARK: - Setup View
     
     func setupView() {
         listView.searchBar.snp.makeConstraints { make in
@@ -106,6 +103,12 @@ extension GameListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         print("Tapped")
+        let detailController = DetailGameViewController(games: gamesManager,
+                                                        storage: storageManager,
+                                                        network: networkManager,
+                                                        appId: self.dataSource[indexPath.row].appid,
+                                                        name: dataSource[indexPath.row].name, isFavorite: dataSource[indexPath.row].isFavorite)
+        self.navigationController?.pushViewController(detailController, animated: true)
     }
 }
 
@@ -118,6 +121,7 @@ extension GameListViewController: UISearchBarDelegate {
         searchBar.showsCancelButton = false
         searchBar.text = ""
         searchBar.resignFirstResponder()
+        searchBar.tintColor = .white
         self.dataSource = gamesStorage
         self.listView.tableView.reloadData()
     }

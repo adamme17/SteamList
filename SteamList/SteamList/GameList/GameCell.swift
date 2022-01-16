@@ -12,6 +12,8 @@ class GameCell: UITableViewCell {
     var safeArea: UILayoutGuide!
     let nameLabel = UILabel()
     var favoriteButton = UIButton()
+    let storageManager = CoreDataManager.shared()
+    var appId: Int = 0
     
     var isFavotite: Bool = false {
         didSet {
@@ -19,6 +21,8 @@ class GameCell: UITableViewCell {
                 favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
             } else {
                 favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+                guard let games = cellViewModel else { return }
+                storageManager.prepareFavorites(dataForSaving: [games])
             }
         }
     }
@@ -33,8 +37,9 @@ class GameCell: UITableViewCell {
     }
     
     @objc func buttonTapped(sender: UIButton) {
-          print("Button was tapped")
+        print("Button was tapped")
         isFavotite.toggle()
+        storageManager.deleteItemFromFavorites(id: appId)
       }
 
     private var cellViewModel: Games?
@@ -60,11 +65,6 @@ class GameCell: UITableViewCell {
 
     private func setupFavouriteButton() {
         contentView.addSubview(favoriteButton)
-        if isFavotite == false {
-            favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
-        } else {
-            favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
-        }
         favoriteButton.tintColor = .orange
         favoriteButton.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
         favoriteButton.clipsToBounds = true
@@ -78,6 +78,7 @@ class GameCell: UITableViewCell {
     }
 
     func setupModel(model: Games) {
+        self.appId = model.appid
         self.cellViewModel = model
         self.nameLabel.text = model.name
         self.isFavotite = model.isFavorite

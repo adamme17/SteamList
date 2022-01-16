@@ -13,7 +13,9 @@ protocol StoreManagerProtocol {
     func prepare(dataForSaving: [Games])
     func createEntityFrom(games: Games) -> GameItems?
     func saveData()
-    func saveDataInBackground()
     func fetchAllData() -> [Games]
+    func fetchGameDetail(id: Int) -> Details?
+    func fetchFavoritesGames() -> [Int]
+    func fetchFavoritesGamesToModel() -> [FavoriteGames]
     func storeDataAsync(data: [Games])
 }

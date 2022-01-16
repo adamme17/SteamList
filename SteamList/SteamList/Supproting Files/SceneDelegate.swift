@@ -18,28 +18,40 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let window = UIWindow(windowScene: scene)
         let rootViewController = viewController()
-        rootViewController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+//        rootViewController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        
         window.rootViewController = rootViewController
         window.makeKeyAndVisible()
         self.window = window
     }
 
-    func viewController() -> UINavigationController {
+    func viewController() -> UIViewController {
         let network: NetworkManagerProtocol = NetworkManager()
         let games: GamesManagerProtocol = GamesManager(network: network)
-        let store: StoreManagerProtocol = CoreDataManager()
+        let store: StoreManagerProtocol = CoreDataManager.shared()
         let gameVC = GameListViewController(games: games, storage: store, network: network)
         gameVC.navigationItem.title = "Games"
-        let favoritesVC = FavoritesViewController()
-        let newsVC = NewsViewController()
+        let gamesNavController = UINavigationController(rootViewController: gameVC)
+//        gamesNavController.navigationBar.barTintColor = UIColor(red: 48, green: 100, blue: 133)
+        let favoritesVC = FavoritesViewController(games: games, storage: store, network: network)
+        let favsNavController = UINavigationController(rootViewController: favoritesVC)
+        favoritesVC.navigationItem.title = "Favorites"
+        let newsVC = NewsViewController(games: games, storage: store, network: network)
+        newsVC.navigationItem.title = "News"
+        let newsNavController = UINavigationController(rootViewController: newsVC)
+        
         
         tabBarController.title = "Games"
+//        tabBarController.delegate = self
 
         gameVC.title = "Games"
+        gameVC.editButtonItem.tintColor = .white
+        //gameVC.navigationItem.titleView.t titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        
         favoritesVC.title = "Favs"
         newsVC.title = "News"
 
-        tabBarController.setViewControllers([gameVC, favoritesVC, newsVC], animated: true)
+        tabBarController.setViewControllers([gamesNavController, favsNavController, newsNavController], animated: true)
 
         guard let items = tabBarController.tabBar.items else { return UINavigationController() }
 
@@ -50,21 +62,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         tabBarController.tabBar.tintColor = .systemBlue
         
-        return UINavigationController(rootViewController: tabBarController)
+        return tabBarController
     }
 }
 
 extension SceneDelegate: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        switch viewController {
-        case is GameListViewController:
-            tabBarController.title = "Games"
-        case is FavoritesViewController:
-            tabBarController.title = "Favorites"
-        case is NewsViewController:
-            tabBarController.title = "News"
-        default:
-            break
-        }
+//        switch viewController {
+//        case is GameListViewController:
+//            tabBarController.title = "Games"
+//        case is FavoritesViewController:
+//            tabBarController.title = "Favorites"
+//        case is NewsViewController:
+//           // tabBarController.title = "News"
+//        default:
+//            break
+//        }
     }
 }

@@ -1,19 +1,20 @@
 //
-//  GameListView.swift
+//  FavoritesView.swift
 //  SteamList
 //
-//  Created by Adam Bokun on 24.11.21.
+//  Created by Adam Bokun on 28.12.21.
 //
 
 import UIKit
 import SnapKit
 
-final class GameListView: BackgroundView {
+final class FavoritesView: BackgroundView {
     
     // MARK: - UIElements
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorColor = .lightGray
         return tableView
     }()
     
@@ -81,13 +82,13 @@ final class GameListView: BackgroundView {
     
     // MARK: - Update
     
-    func update(state: GameListState) {
+    func update(state: FavoritesListState) {
         titleLabel.textColor = .white
         titleLabel.text = state.title
     }
 }
 
-struct GameListState {
+struct FavoritesListState {
     let title: String
     let color: UIColor
 }
