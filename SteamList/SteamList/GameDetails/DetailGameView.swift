@@ -31,7 +31,6 @@ final class DetailGameView: BackgroundView {
     var contentView = UIView()
     let storageManager = CoreDataManager.shared()
     var games: Details?
-//    var contentStackView = UIStackView()
     
     var isFavorite: Bool = false {
         didSet {
@@ -40,6 +39,8 @@ final class DetailGameView: BackgroundView {
                     pointSize: 25, weight: .medium, scale: .default)
                 let image = UIImage(systemName: "star", withConfiguration: config)
                 isFavoriteButton.setImage(image, for: .normal)
+                guard let appId = Int(appId) else { return }
+                storageManager.deleteItemFromFavorites(id: appId)
             } else {
                 let config = UIImage.SymbolConfiguration(
                     pointSize: 25, weight: .medium, scale: .default)
@@ -76,7 +77,6 @@ final class DetailGameView: BackgroundView {
     }
     
     private func setupConstraints() {
-//        contentView.addSubview(contentStackView)
         self.addSubview(scrollView)
         scrollView.isScrollEnabled = true
         scrollView.showsVerticalScrollIndicator = true
@@ -122,31 +122,20 @@ final class DetailGameView: BackgroundView {
         descrptionLabel.numberOfLines = 0
         descrptionLabel.textColor = .white
         
-//        contentStackView.axis = .horizontal
-//        contentStackView.alignment = .fill
-//        contentStackView.distribution = .fillProportionally
-        
         scrollView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.width.equalToSuperview()
-//            make.height.equalToSuperview()
             make.centerX.equalToSuperview()
-//            make.centerY.equalToSuperview()
         }
         contentView.snp.makeConstraints { make in
             make.top.bottom.equalTo(self.scrollView)
             make.left.right.equalToSuperview()
             make.width.equalTo(self.scrollView)
             make.height.equalTo(self.scrollView)
-//            make.top.bottom.equalTo(scrollView)
-//            make.width.equalTo(scrollView)
-//            make.height.equalTo(scrollView)
-//            make.centerX.equalTo(scrollView)
-//            make.centerY.equalTo(scrollView)
         }
         headerImage.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-//            make.top.equalTo(safeAreaLayoutGuide.snp.top)
+            //            make.top.equalTo(safeAreaLayoutGuide.snp.top)
             make.top.equalTo(contentView)
             make.height.equalTo(nameLabel.snp.width).multipliedBy(0.5)
         }
@@ -210,33 +199,30 @@ final class DetailGameView: BackgroundView {
     }
     
     func setupScreenShotImageViews(numbers: Int) {
-            for count in 0..<numbers {
-                let screenshotImageView = CustomImageView()
-                screenshotImageView.translatesAutoresizingMaskIntoConstraints = false
-                screenshotImageView.isUserInteractionEnabled = true
-                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tappedScreenshot(handler:)))
-                screenshotImageView.addGestureRecognizer(tapGesture)
-                self.screenshotsViews.append(screenshotImageView)
-                
-                contentView.addSubview(screenshotImageView)
-                screenshotImageView.snp.makeConstraints { make in
-                    if let lastImageView = self.lastImageView {
-                        make.top.equalTo(lastImageView.snp.bottom).offset(5)
-                    } else {
-                        make.top.equalTo(descrptionLabel.snp.bottom).offset(20)
-                    }
-                    make.leading.equalToSuperview().offset(10)
-                    make.trailing.equalToSuperview().offset(-10)
-                    make.height.equalTo(self.snp.width).multipliedBy(0.5)
-                    if count == numbers {
-                        make.bottom.equalTo(scrollView)
-                    }
+        for count in 0..<numbers {
+            let screenshotImageView = CustomImageView()
+            screenshotImageView.translatesAutoresizingMaskIntoConstraints = false
+            screenshotImageView.isUserInteractionEnabled = true
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tappedScreenshot(handler:)))
+            screenshotImageView.addGestureRecognizer(tapGesture)
+            self.screenshotsViews.append(screenshotImageView)
+            
+            contentView.addSubview(screenshotImageView)
+            screenshotImageView.snp.makeConstraints { make in
+                if let lastImageView = self.lastImageView {
+                    make.top.equalTo(lastImageView.snp.bottom).offset(5)
+                } else {
+                    make.top.equalTo(descrptionLabel.snp.bottom).offset(20)
                 }
-                self.lastImageView = screenshotImageView
+                make.leading.equalToSuperview().offset(10)
+                make.trailing.equalToSuperview().offset(-10)
+                make.height.equalTo(self.snp.width).multipliedBy(0.5)
+                if count == numbers {
+                    make.bottom.equalToSuperview()
+                }
+            }
+            self.lastImageView = screenshotImageView
         }
-//        self.layoutIfNeeded()
-//        self.layoutSubviews()
-//        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*100)
     }
     
     func setupData(games: Details, appId: String) {
@@ -250,12 +236,16 @@ final class DetailGameView: BackgroundView {
             }
         }
         if let genres = games.genres {
-            var genresString = ""
-            for genre in genres {
-                genresString += "\(genre.genreDescription ?? "")       "
-            }
-            DispatchQueue.main.async {
-                self.genreLabel.text = genresString
+            if genres.isEmpty {
+                genreLabel.isHidden = true
+            } else {
+                var genresString = ""
+                for genre in genres {
+                    genresString += "\(genre.genreDescription ?? "")       "
+                }
+                DispatchQueue.main.async {
+                    self.genreLabel.text = genresString
+                }
             }
         }
         if (games.releaseDate?.comingSoon == false) {

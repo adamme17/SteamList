@@ -81,7 +81,7 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         }
         return persistentStoreCoordinator
     }()
-  
+    
     func prepare(dataForSaving: [Games]) {
         _ = dataForSaving.map {self.createEntityFrom(games: $0)}
         saveData()
@@ -173,7 +173,7 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         
         return favorites
     }
-
+    
     internal func createFavoritesEntityFrom(game: Games) -> FavoriteGames {
         let favorites = FavoriteGames(context: self.managedObjectContext)
         favorites.isFree = false
@@ -198,19 +198,6 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         }
     }
     
-//    func saveDataInBackground() {
-//        persistentContainer.performBackgroundTask { (context) in
-//            if context.hasChanges {
-//                do {
-//                    try context.save()
-//                } catch {
-//                    let nserror = error as NSError
-//                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-//                }
-//            }
-//        }
-//    }
-    
     func fetchAllData() -> [Games] {
         var result = [Games]()
         var favorites = [FavoriteGames]()
@@ -234,10 +221,10 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
                 let context = self.managedObjectContext
                 let objects = try context.fetch(fetchRequest)
                 let fetchResult = objects.compactMap { game -> Games in
-                        return Games(appId: Int(game.appid),
-                                     name: game.name ?? "",
-                                     isFavorite: favorites.contains(where: {Int($0.id) == Int(game.appid)}))
-                    }
+                    return Games(appId: Int(game.appid),
+                                 name: game.name ?? "",
+                                 isFavorite: favorites.contains(where: {Int($0.id) == Int(game.appid)}))
+                }
                 result += fetchResult
             } catch {
                 print(error.localizedDescription)
@@ -335,7 +322,6 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
     func fetchFavoritesGames() -> [Int] {
         var result = [Int]()
         self.storeQueue.addOperation {
-            
             let fetchRequest: NSFetchRequest<FavoriteGames> = FavoriteGames.fetchRequest()
             do {
                 let context = self.managedObjectContext
@@ -352,25 +338,30 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         return result
     }
     
+    func fetchFavoritesGamesToModel() -> [FavoriteGames] {
+        var favorites = [FavoriteGames]()
+        self.storeQueue.addOperation {
+            let fetchRequest: NSFetchRequest<FavoriteGames> = FavoriteGames.fetchRequest()
+            do {
+                let context = self.managedObjectContext
+                let objects = try context.fetch(fetchRequest)
+                favorites += objects
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        self.storeQueue.waitUntilAllOperationsAreFinished()
+        return favorites
+    }
     
-    //    func markAsFavorite(details: Details) {
-    //        self.storeQueue.addOperation {
-    //
-    //            var fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "GameItems")
-    //            fetchRequest.predicate = NSPredicate(format: "appid=%@", 1213750)
-    //            do {
-    //                if let fetchResult = try self.managedObjectContext.fetch(fetchRequest) as? [NSManagedObject] {
-    //                    if !fetchResult.isEmpty {
-    //                        fetchResult.forEach { element in
-    //                            element.managedObjectContext?.setValue(true, forKey: "isFavorite")
-    //                        }
-    //                    }
-    //                }
-    //            } catch let error {
-    //                print(error.localizedDescription)
-    //            }
-    //        }
-    //    }
+    func deleteItemFromFavorites(id: Int) {
+        guard let favorite = fetchFavoritesGamesToModel()
+                .first(where: { Int($0.id) == id })
+        else { return }
+        
+        managedObjectContext.delete(favorite)
+        saveData()
+    }
     
     func storeDataAsync(data: [Games]) {
         self.storeQueue.addOperation {

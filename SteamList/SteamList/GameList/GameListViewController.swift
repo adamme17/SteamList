@@ -59,8 +59,11 @@ class GameListViewController: UIViewController {
         if gamesList.isEmpty {
             loadEventsPage()
         } else {
-            dataSource += gamesList
-            gamesStorage += gamesList
+            dataSource = gamesList
+            gamesStorage = gamesList
+            DispatchQueue.main.async {
+                self.listView.tableView.reloadData()
+            }
         }
     }
     
@@ -72,15 +75,9 @@ class GameListViewController: UIViewController {
         listView.tableView.dataSource = self
         listView.tableView.delegate = self
         listView.tableView.register(GameCell.self, forCellReuseIdentifier: "cellId")
-        refreshData()
-    }
-    func refreshData() {
-        //        let data =
-        //        let state = GameListState(title: data.title, color: data.color)
-        //        listView.updateState(state: state)
     }
     
-// MARK: - Setup View
+    // MARK: - Setup View
     
     func setupView() {
         listView.searchBar.snp.makeConstraints { make in
@@ -124,6 +121,7 @@ extension GameListViewController: UISearchBarDelegate {
         searchBar.showsCancelButton = false
         searchBar.text = ""
         searchBar.resignFirstResponder()
+        searchBar.tintColor = .white
         self.dataSource = gamesStorage
         self.listView.tableView.reloadData()
     }

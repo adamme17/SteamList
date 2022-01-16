@@ -22,8 +22,6 @@ final class GamesManager {
     }
 }
 
-
-
 extension GamesManager: GamesManagerProtocol {
     func makeRequest<T: Codable>(endPoint: SteamEndPoints, completion: @escaping (Result<T, Error>) -> Void) {
         network.request(endPoint: endPoint) { data, response, error in
@@ -54,6 +52,10 @@ extension GamesManager: GamesManagerProtocol {
                 }
             }
         }
+    }
+    
+    func getGameNews(endPoint: SteamEndPoints, completion: @escaping (Result<[String: Appnews], Error>) -> Void) {
+        makeRequest(endPoint: endPoint, completion: completion)
     }
     
     func getGameDetails(endPoint: SteamEndPoints, completion: @escaping (Result<[String: DetailResponse], Error>) -> Void) {

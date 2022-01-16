@@ -21,13 +21,12 @@ struct DetailResponse: Codable {
 // MARK: - DataClass
 struct Details: Codable {
     let type, name: String?
-    let steamAppid, requiredAge: Int?
+    var steamAppid, requiredAge: Int?
     let isFree: Bool?
     let controllerSupport, detailedDescription, aboutTheGame, shortDescript: String?
     let supportedLanguages: String?
     let headerImage: String?
     let website: String?
-    // let pcRequirements: PCRequirements?
     let legalNotice: String?
     let developers, publishers: [String]?
     let priceOverview: Price?
@@ -36,7 +35,6 @@ struct Details: Codable {
     let genres: [Genre]?
     let screenshots: [Screenshot]?
     let releaseDate: ReleaseDate?
-    // let supportInfo: SupportInfo?
     let background: String?
     
     enum CodingKeys: String, CodingKey {
@@ -51,13 +49,11 @@ struct Details: Codable {
         case supportedLanguages = "supported_languages"
         case headerImage = "header_image"
         case website
-        //case pcRequirements = "pc_requirements"
         case legalNotice = "legal_notice"
         case developers, publishers
         case priceOverview = "price_overview"
         case platforms, genres, screenshots, categories
         case releaseDate = "release_date"
-        // case supportInfo = "support_info"
         case background
     }
 }

@@ -93,8 +93,5 @@ class DetailGameViewController: UIViewController {
         detailView.translatesAutoresizingMaskIntoConstraints = false
         detailView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
         detailView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-//        detailView.scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*100)
     }
 }
-
-

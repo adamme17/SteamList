@@ -13,7 +13,7 @@ class GameCell: UITableViewCell {
     let nameLabel = UILabel()
     var favoriteButton = UIButton()
     let storageManager = CoreDataManager.shared()
-    var games: Details?
+    var appId: Int = 0
     
     var isFavotite: Bool = false {
         didSet {
@@ -37,9 +37,9 @@ class GameCell: UITableViewCell {
     }
     
     @objc func buttonTapped(sender: UIButton) {
-          print("Button was tapped")
+        print("Button was tapped")
         isFavotite.toggle()
-//        CoreDataManager.saveData()
+        storageManager.deleteItemFromFavorites(id: appId)
       }
 
     private var cellViewModel: Games?
@@ -75,14 +75,10 @@ class GameCell: UITableViewCell {
             constraints.leading.greaterThanOrEqualTo(nameLabel.snp.trailing).offset(10)
             constraints.width.greaterThanOrEqualTo(20)
         }
-//        let favorites = storageManager.fetchFavoritesGames()
-//
-//        if favorites.contains(where: { $0 == games?.steamAppid }) {
-//            isFavotite = true
-//        }
     }
 
     func setupModel(model: Games) {
+        self.appId = model.appid
         self.cellViewModel = model
         self.nameLabel.text = model.name
         self.isFavotite = model.isFavorite
