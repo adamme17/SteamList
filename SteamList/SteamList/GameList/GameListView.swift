@@ -11,9 +11,11 @@ import SnapKit
 final class GameListView: BackgroundView {
     
     // MARK: - UIElements
+    
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorColor = .lightGray
         return tableView
     }()
     
@@ -34,6 +36,7 @@ final class GameListView: BackgroundView {
     }()
     
     // MARK: - Initialization
+    
     override init(frame: CGRect) {
         super.init(frame: UIScreen.main.bounds)
         setup()
