@@ -5,19 +5,24 @@
 //  Created by Adam Bokun on 10.12.21.
 //
 
-import Foundation
 import UIKit
+import SnapKit
 
 class NewsView: BackgroundView {
     
     // MARK: - UIElements
     let tableView: UITableView = {
         let tableView = UITableView()
-        let refreshControl = UIRefreshControl()
-        tableView.refreshControl = refreshControl
         tableView.backgroundColor = .clear
         tableView.separatorColor = .lightGray
         return tableView
+    }()
+    
+    var topFilterViewConstraint: Constraint?
+    
+    var filterView: FilterView = {
+        let filterView = FilterView()
+        return filterView
     }()
     
     private let titleLabel: UILabel = {
@@ -77,15 +82,15 @@ class NewsView: BackgroundView {
     }
     
     func setupFilterView() {
-//        self.addSubview(filterView)
-//
-//        filterView.snp.makeConstraints { constraints in
-//            topFilterViewConstraint = constraints.top.equalTo(self.bounds.height).constraint
-//            constraints.centerX.equalToSuperview()
-//            constraints.width.equalTo(self.frame.width * 0.65)
-//            constraints.height.equalTo(self.frame.height * 0.4)
-//        }
-//        self.layoutIfNeeded()
+        self.addSubview(filterView)
+
+        filterView.snp.makeConstraints { constraints in
+            topFilterViewConstraint = constraints.top.equalTo(self.bounds.height).constraint
+            constraints.centerX.equalToSuperview()
+            constraints.width.equalTo(self.frame.width * 0.65)
+            constraints.height.equalTo(self.frame.height * 0.4)
+        }
+        self.layoutIfNeeded()
     }
     
     func addBlur() {

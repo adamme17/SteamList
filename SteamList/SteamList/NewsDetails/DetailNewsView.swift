@@ -10,183 +10,104 @@ import WebKit
 
 final class DetailNewsView: BackgroundView {
     
-    var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+    var appId = ""
+    var name: String = ""
+    let gameNameLabel = UILabel()
+    let titleLabel = UILabel()
+    let authorLabel = UILabel()
+    let dateLabel = UILabel()
+    let horizontalLine = UIView()
+    var scrollView = UIScrollView()
+    var contentView = UIView()
+    var webView = WKWebView()
+    var news: Newsitem?
+    
+    override init() {
+        super.init(frame: UIScreen.main.bounds)
+        setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupConstraints() {
+        self.addSubview(scrollView)
         scrollView.isScrollEnabled = true
-        return scrollView
-    }()
-
-    var contentView: UIView = {
-        let contentView = UIView()
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        return contentView
-    }()
-
-    var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 18.0)
-        label.numberOfLines = 0
-        return label
-    }()
-
-    var gameNameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textAlignment = .left
-        label.textColor = .white
-        label.numberOfLines = 1
-        return label
-    }()
-
-    var authorLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.italicSystemFont(ofSize: 12)
-        label.textAlignment = .left
-        label.textColor = .white
-        label.numberOfLines = 1
-        return label
-    }()
-
-    var dateLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textAlignment = .right
-        label.textColor = .white
-        label.numberOfLines = 1
-        return label
-    }()
-
-    var webView: WKWebView = {
-        let webView = WKWebView()
+        scrollView.showsVerticalScrollIndicator = true
+        scrollView.addSubview(contentView)
+        contentView.addSubview(gameNameLabel)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(authorLabel)
+        contentView.addSubview(dateLabel)
+        contentView.addSubview(horizontalLine)
+        contentView.addSubview(webView)
+        
+        gameNameLabel.font = UIFont.systemFont(ofSize: 14)
+        gameNameLabel.textAlignment = .left
+        gameNameLabel.textColor = .white
+        gameNameLabel.numberOfLines = 1
+        
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 18.0)
+        titleLabel.numberOfLines = 0
+        titleLabel.textColor = .white
+        
+        dateLabel.font = UIFont.systemFont(ofSize: 14)
+        dateLabel.textAlignment = .left
+        dateLabel.textColor = .white
+        dateLabel.numberOfLines = 1
+        
+        authorLabel.font = UIFont.italicSystemFont(ofSize: 12)
+        authorLabel.textAlignment = .left
+        authorLabel.textColor = .white
+        authorLabel.numberOfLines = 1
+        
+        horizontalLine.backgroundColor = .gray
+        
         webView.isOpaque = false
         webView.backgroundColor = .clear
         webView.scrollView.backgroundColor = .clear
         webView.tintColor = .white
-        return webView
-    }()
 
-    var contentLabel: UILabel = {
-        let label = UILabel()
-        label.lineBreakMode = .byWordWrapping
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.textColor = .white
-        return label
-    }()
-
-    var horizontalLine: UIView = {
-        let horizontalLine = UIView()
-        horizontalLine.backgroundColor = .white
-        return horizontalLine
-    }()
-
-    private var errorLabel: UILabel = {
-        let errorLabel = UILabel()
-        errorLabel.textColor = .white
-        return errorLabel
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    convenience override init() {
-        self.init(frame: UIScreen.main.bounds)
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    private func setupSeccessView() {
-        setupScrollView()
-        setupContentView()
-        setupHeader()
-        setupHorizontalLine()
-        // setupContentLabel()
-        setupWebView()
-    }
-
-    private func setupScrollView() {
-        self.addSubview(scrollView)
-        scrollView.snp.makeConstraints { constraints in
-            constraints.top.bottom.equalTo(safeAreaLayoutGuide)
-            constraints.leading.trailing.equalToSuperview()
-            constraints.width.equalToSuperview()
+        scrollView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
         }
-    }
-
-    private func setupContentView() {
-        scrollView.addSubview(contentView)
-        contentView.snp.makeConstraints { constraints in
-            constraints.centerX.width.top.bottom.equalToSuperview()
+        contentView.snp.makeConstraints { make in
+            make.top.bottom.equalTo(self.scrollView)
+            make.left.right.equalToSuperview()
+            make.width.equalTo(self.scrollView)
+            make.height.equalTo(self.scrollView)
         }
-    }
-
-    private func setupHeader() {
-        let containerView = UIView()
-        containerView.addSubview(gameNameLabel)
-        containerView.addSubview(dateLabel)
-
-        contentView.addSubview(containerView)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(authorLabel)
-
-        containerView.snp.makeConstraints { constraints in
-            constraints.top.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-        }
-
         gameNameLabel.snp.makeConstraints { (constraints) in
-            constraints.top.equalToSuperview().offset(10)
-            constraints.centerY.equalToSuperview()
-            constraints.leading.equalToSuperview().offset(15)
+            constraints.height.equalTo(50)
+            constraints.top.equalToSuperview().offset(5)
+            constraints.leading.equalToSuperview().offset(20)
         }
-
         dateLabel.snp.makeConstraints { constraints in
-            constraints.top.equalToSuperview().offset(10)
-            constraints.centerY.equalToSuperview()
+            constraints.height.equalTo(50)
+            constraints.top.equalToSuperview().offset(5)
+            constraints.centerY.equalTo(gameNameLabel.snp.centerY)
             constraints.trailing.equalToSuperview().offset(-10)
-            constraints.leading.equalTo(gameNameLabel.snp.trailing).offset(10)
-            constraints.width.equalTo(gameNameLabel.snp.width).multipliedBy(0.5)
         }
-
         authorLabel.snp.makeConstraints { (constraints) in
-            constraints.top.equalTo(containerView.snp.bottom)
-            constraints.trailing.equalToSuperview().offset(-10)
-            constraints.leading.equalToSuperview().offset(15)
+            constraints.height.equalTo(20)
+            constraints.top.equalTo(gameNameLabel.snp.bottom).offset(5)
+            constraints.leading.equalToSuperview().offset(20)
         }
-
         titleLabel.snp.makeConstraints { constraints in
-            constraints.top.equalTo(authorLabel.snp.bottom).offset(10)
+            constraints.height.equalTo(20)
+            constraints.top.equalTo(authorLabel.snp.bottom).offset(20)
             constraints.trailing.equalToSuperview().offset(-10)
-            constraints.leading.equalToSuperview().offset(15)
+            constraints.leading.equalToSuperview().offset(20)
         }
-    }
-
-    private func setupHorizontalLine() {
-        contentView.addSubview(horizontalLine)
         horizontalLine.snp.makeConstraints { constraints in
-            constraints.top.equalTo(titleLabel.snp.bottom).offset(30)
+            constraints.top.equalTo(titleLabel.snp.bottom).offset(15)
             constraints.leading.equalToSuperview().offset(10)
             constraints.trailing.equalToSuperview().offset(-10)
             constraints.height.equalTo(1)
         }
-    }
-
-//    private func setupContentLabel() {
-//        contentView.addSubview(contentLabel)
-//        contentLabel.snp.makeConstraints { constraints in
-//            constraints.top.equalTo(horizontalLine.snp.bottom).offset(20)
-//            constraints.leading.equalToSuperview().offset(20)
-//            constraints.trailing.equalToSuperview().offset(-20)
-//            constraints.bottom.equalToSuperview()
-//        }
-//    }
-
-    private func setupWebView() {
-        contentView.addSubview(webView)
         webView.snp.makeConstraints { constraints in
             constraints.top.equalTo(horizontalLine.snp.bottom).offset(20)
             constraints.leading.equalToSuperview().offset(10)
@@ -195,21 +116,31 @@ final class DetailNewsView: BackgroundView {
             constraints.bottom.equalToSuperview()
         }
     }
-
-    private func setupEmptyView() {
-        setupErrorLabel(text: "Oops... No data here")
+    
+    func getString(from date: Date) -> String {
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "d MMM, yyyy"
+        let date = dateFormater.string(from: date)
+        return date
     }
-
-    private func setupErrorView() {
-        setupErrorLabel(text: "Oops... Something go wrong")
-    }
-
-    private func setupErrorLabel(text: String) {
-        self.addSubview(errorLabel)
-        errorLabel.text = text
-        errorLabel.snp.makeConstraints { constraints in
-            constraints.center.equalToSuperview()
-        }
+    
+    func setupData(news: Newsitem, appId: String, gameName: String) {
+        self.appId = appId
+        self.name = gameName
+        self.news = news
+        
+        self.gameNameLabel.text = gameName
+        self.titleLabel.text = news.title
+        self.authorLabel.text = "by \(news.author.isEmpty ? "Unknown" : news.author)"
+        let date = Date(timeIntervalSince1970: Double(news.date))
+        self.dateLabel.text = self.getString(from: date)
+        let font = UIFont.systemFont(ofSize: 40)
+        let fontName =  "-apple-system"
+        let linkStyle = "<style>a:link { color: #8397D3; }</style>"
+        var htmlString = "\(linkStyle)<span style=\"font-family: \(fontName); font-size: \(font.pointSize); color: #FFFFFF\">\(String(describing: news.contents))</span>"
+        htmlString = htmlString.replacingOccurrences(of: "[", with: "<")
+        htmlString = htmlString.replacingOccurrences(of: "]", with: ">")
+        self.webView.loadHTMLString(htmlString, baseURL: nil)
     }
     
 }

@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct FilterNews {
+    var filteredNews = [Newsitem]()
+    var filteredGames = [FilterItem]()
+}
+
 struct Appnews: Codable {
     let appid: Int
     let newsitems: [Newsitem]
@@ -14,6 +19,7 @@ struct Appnews: Codable {
 }
 
 // MARK: - Newsitem
+
 struct Newsitem: Codable {
     let gid, title: String
     let url: String
@@ -29,5 +35,26 @@ struct Newsitem: Codable {
         case author, contents, feedlabel, date, feedname
         case feedType = "feed_type"
         case appid
+    }
+}
+
+class FilterItem: Hashable {
+    
+    static func == (lhs: FilterItem, rhs: FilterItem) -> Bool {
+        lhs.gameID == rhs.gameID
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(gameID)
+    }
+    
+    var gameID: String
+    var name: String
+    var isEnabled: Bool
+
+    init(gameID: String, name: String, isEnabled: Bool) {
+        self.gameID = gameID
+        self.name = name
+        self.isEnabled = isEnabled
     }
 }

@@ -10,6 +10,7 @@ import UIKit
 class NewsViewController: UIViewController {
 
     private let newsList = NewsView()
+    private let filterViewController = FilterViewController()
     var safeArea: UILayoutGuide!
     private var newsModel = [Newsitem]()
     private var favorites = [FavoriteGames]()
@@ -19,6 +20,7 @@ class NewsViewController: UIViewController {
     let networkManager: NetworkManagerProtocol
     
     let newsOperationQueue = OperationQueue()
+    
     
     init (games: GamesManagerProtocol, storage: StoreManagerProtocol, network: NetworkManagerProtocol) {
         self.gamesManager = games
@@ -37,11 +39,19 @@ class NewsViewController: UIViewController {
     
     func loadNewsPage(appId: Int) {
         gamesManager.getGameNews(endPoint: .getGameNews(appId: appId, number: 10)) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let model):
-                self?.newsModel += model["appnews"]?.newsitems ?? []
+                self.newsModel += model["appnews"]?.newsitems ?? []
+                self.newsModel = self.sortNewsByDate(news:  self.newsModel)
+                self.filterViewController.newsModel.filteredNews = self.newsModel
+                let filterItems = self.newsModel.map { item -> FilterItem in
+                    let favName = self.favorites.first(where: { $0.id == item.appid })?.name ?? ""
+                    return FilterItem(gameID: String(item.appid), name: favName, isEnabled: false)
+                }
+                self.filterViewController.newsModel.filteredGames = Array(Set<FilterItem>(filterItems))
                 DispatchQueue.main.async {
-                    self?.newsList.tableView.reloadData()
+                    self.newsList.tableView.reloadData()
                 }
             case .failure(let error):
                 print(error.localizedDescription)
@@ -49,14 +59,17 @@ class NewsViewController: UIViewController {
         }
     }
     
+    private func sortNewsByDate(news: [Newsitem]) -> [Newsitem] {
+        return news.sorted { (lhs, rhs) -> Bool in
+            let lhsDate = Date(timeIntervalSince1970: Double(lhs.date))
+            let rhsDate = Date(timeIntervalSince1970: Double(rhs.date))
+            
+            return lhsDate > rhsDate
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         newsList.update(state: NewsListState(title: "News", color: .white))
-        favorites = storageManager.fetchFavoritesGamesToModel()
-        for fav in favorites {
-            newsOperationQueue.addOperation {
-                self.loadNewsPage(appId: Int(fav.id))
-            }
-        }
     }
     
     private func setupNavBar() {
@@ -76,8 +89,43 @@ class NewsViewController: UIViewController {
         newsList.tableView.delegate = self
         newsList.tableView.register(NewsCell.self, forCellReuseIdentifier: "cellId")
         
+        newsList.filterView.tableView.delegate = filterViewController
+        newsList.filterView.tableView.dataSource = filterViewController
+        newsList.filterView.saveButton.addTarget(self, action: #selector(saveFilterSettings), for: .touchUpInside)
+        
         newsOperationQueue.maxConcurrentOperationCount = 5
         newsOperationQueue.qualityOfService = .utility
+        
+        favorites = storageManager.fetchFavoritesGamesToModel()
+        for fav in favorites {
+            newsOperationQueue.addOperation {
+                self.loadNewsPage(appId: Int(fav.id))
+            }
+        }
+    }
+    
+    @objc
+    private func saveFilterSettings() {
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        UIView.animate(withDuration: 0.5) {
+            self.newsList.blurView.alpha = 0
+            self.newsList.topFilterViewConstraint?.update(offset: self.newsList.frame.height)
+            self.newsList.layoutIfNeeded()
+        } completion: { _ in
+            self.newsList.deleteBlur()
+            self.newsList.filterView.removeFromSuperview()
+        }
+        var gamesID = [String]()
+        for game in filterViewController.newsModel.filteredGames where game.isEnabled {
+            gamesID.append(game.gameID)
+        }
+        guard !gamesID.isEmpty else {
+            newsModel = filterViewController.newsModel.filteredNews
+            newsList.tableView.reloadData()
+          return
+        }
+        newsModel = filterViewController.newsModel.filteredNews.filter { gamesID.contains(String($0.appid)) }
+        newsList.tableView.reloadData()
     }
     
     @objc
@@ -89,8 +137,8 @@ class NewsViewController: UIViewController {
         }
         newsList.setupFilterView()
         UIView.animate(withDuration: 0.5) {
-//            let yPoint = self.newsList.frame.height / 2 - self.newsList.filterView.frame.height / 2
-//            self.newsList.topFilterViewConstraint?.update(offset: yPoint)
+            let yPoint = self.newsList.frame.height / 2 - self.newsList.filterView.frame.height / 2
+            self.newsList.topFilterViewConstraint?.update(offset: yPoint)
             self.newsList.layoutIfNeeded()
         }
     }
@@ -112,12 +160,15 @@ extension NewsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let favName = favorites.first(where: { $0.id == newsModel[indexPath.row].appid })?.name ?? ""
         print("Tapped")
         let detailNewsController = DetailNewsViewController(games: gamesManager,
                                                         storage: storageManager,
                                                         network: networkManager,
                                                             appId: self.newsModel[indexPath.row].appid,
-                                                            title: self.newsModel[indexPath.row].title)
+                                                            title: self.newsModel[indexPath.row].title,
+                                                            name: favName,
+                                                            news: newsModel[indexPath.row])
         self.navigationController?.pushViewController(detailNewsController, animated: true)
     }
 }
