@@ -95,7 +95,7 @@ final class DetailGameView: BackgroundView {
         
         nameLabel.textColor = .white
         nameLabel.font = UIFont.boldSystemFont(ofSize: 25.0)
-        nameLabel.numberOfLines = 2
+        nameLabel.numberOfLines = 0
         
         isFavoriteButton.tintColor = .orange
         isFavoriteButton.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
@@ -122,32 +122,36 @@ final class DetailGameView: BackgroundView {
         descrptionLabel.numberOfLines = 0
         descrptionLabel.textColor = .white
         
+        
         scrollView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
+//            make.top.bottom.equalToSuperview()
+//            make.width.equalToSuperview()
+//            make.centerX.equalToSuperview()
+            make.top.bottom.leading.trailing.equalToSuperview()
         }
         contentView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(self.scrollView)
-            make.left.right.equalToSuperview()
-            make.width.equalTo(self.scrollView)
-            make.height.equalTo(self.scrollView)
+//            make.top.bottom.equalTo(self.scrollView)
+//            make.left.right.equalToSuperview()
+//            make.width.equalTo(self.scrollView)
+//            make.height.equalTo(self.scrollView)
+            make.centerX.width.top.bottom.equalToSuperview()
         }
         headerImage.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalTo(contentView)
             //            make.top.equalTo(safeAreaLayoutGuide.snp.top)
-            make.top.equalTo(contentView)
+            make.top.equalToSuperview()
+//            make.height.equalTo(200)
             make.height.equalTo(nameLabel.snp.width).multipliedBy(0.5)
         }
         nameLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.height.equalTo(50)
+//            make.height.equalTo(50)
             make.leading.trailing.equalToSuperview().inset(35)
             make.top.equalTo(headerImage.snp.bottom).offset(10)
         }
         isFavoriteButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(10)
-            make.height.equalTo(50)
+//            make.height.equalTo(50)
             make.top.equalTo(headerImage.snp.bottom).offset(10)
         }
         genreLabel.snp.makeConstraints { make in
@@ -194,7 +198,7 @@ final class DetailGameView: BackgroundView {
             make.top.equalTo(horizontalLine.snp.bottom).offset(20)
             make.leading.equalTo(contentView).offset(10)
             make.trailing.equalTo(contentView).offset(-10)
-            make.height.greaterThanOrEqualTo(100)
+//            make.height.greaterThanOrEqualTo(100)
         }
     }
     
@@ -217,15 +221,38 @@ final class DetailGameView: BackgroundView {
                 make.leading.equalToSuperview().offset(10)
                 make.trailing.equalToSuperview().offset(-10)
                 make.height.equalTo(self.snp.width).multipliedBy(0.5)
-                if count == numbers {
-                    make.bottom.equalToSuperview()
+//                make.bottom.equalTo(contentView)
+                if count == numbers - 1 {
+                    make.bottom.equalTo(contentView)
                 }
             }
             self.lastImageView = screenshotImageView
         }
     }
     
+    private var errorLabel: UILabel = {
+        let errorLabel = UILabel()
+        errorLabel.textColor = .white
+        return errorLabel
+    }()
+    
+    private func setupErrorLabel(text: String) {
+        self.addSubview(errorLabel)
+        errorLabel.text = text
+        errorLabel.snp.makeConstraints { constraints in
+            constraints.center.equalToSuperview()
+        }
+    }
+    
     func setupData(games: Details, appId: String) {
+        if games.name?.isEmpty == false {
+            succesSetupData(games: games, appId: appId)
+        } else {
+            setupErrorLabel(text: "Oops... No data here")
+        }
+    }
+    
+    func succesSetupData(games: Details, appId: String) {
         self.appId = appId
         self.games = games
         if let url = URL(string: games.headerImage ?? "") {
@@ -306,7 +333,6 @@ final class DetailGameView: BackgroundView {
                     }
                 }
             }
-            
         }
         let favorites = storageManager.fetchFavoritesGames()
         
