@@ -47,11 +47,15 @@ class DetailGameViewController: UIViewController {
                     return
                 }
                 self.games = model
+                if model.success == false {
+                    detailView.failureSetupData()
+                }
                 if let gameData = model.data {
                     coreDataManager.prepareDetails(dataForSaving: [gameData])
                     detailView.setupData(games: gameData, appId: String(appId))
                 }
             case .failure(let error):
+                detailView.failureSetupData()
                 print(error.localizedDescription)
             }
         }

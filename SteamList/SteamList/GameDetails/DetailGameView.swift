@@ -237,11 +237,21 @@ final class DetailGameView: BackgroundView {
     }()
     
     private func setupErrorLabel(text: String) {
-        self.addSubview(errorLabel)
-        errorLabel.text = text
-        errorLabel.snp.makeConstraints { constraints in
-            constraints.center.equalToSuperview()
+        DispatchQueue.main.async {
+            self.addSubview(self.errorLabel)
+            self.errorLabel.text = text
+        
+            self.horizontalLine.isHidden = true
+            self.isFavoriteButton.isHidden = true
+            
+            self.errorLabel.snp.makeConstraints { constraints in
+                constraints.center.equalToSuperview()
+            }
         }
+    }
+    
+    func failureSetupData() {
+        setupErrorLabel(text: "Oops... No data here")
     }
     
     func setupData(games: Details, appId: String) {
@@ -258,9 +268,11 @@ final class DetailGameView: BackgroundView {
         if let url = URL(string: games.headerImage ?? "") {
             DispatchQueue.main.async {
                 self.headerImage.loadImage(from: url)
-                self.nameLabel.text = games.name
-                self.descrptionLabel.text = games.shortDescript
             }
+        }
+        DispatchQueue.main.async {
+            self.nameLabel.text = games.name
+            self.descrptionLabel.text = games.shortDescript
         }
         if let genres = games.genres {
             if genres.isEmpty {

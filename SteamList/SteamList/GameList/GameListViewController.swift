@@ -121,7 +121,11 @@ extension GameListViewController: UISearchBarDelegate {
         searchBar.showsCancelButton = false
         searchBar.text = ""
         searchBar.resignFirstResponder()
-        searchBar.tintColor = .white
+//        if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
+//            textfield.textColor = UIColor.white
+//        }
+//        searchBar.tintColor = .white
+//        searchBar.backgroundColor = .white
         self.dataSource = gamesStorage
         self.listView.tableView.reloadData()
     }

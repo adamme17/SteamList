@@ -8,7 +8,7 @@
 import UIKit
 
 class NewsViewController: UIViewController {
-
+    
     private let newsList = NewsView()
     private let filterViewController = FilterViewController()
     var safeArea: UILayoutGuide!
@@ -45,14 +45,6 @@ class NewsViewController: UIViewController {
                 self.newsModel += model["appnews"]?.newsitems ?? []
                 self.newsModel = self.sortNewsByDate(news:  self.newsModel)
                 self.filterViewController.newsModel.filteredNews = self.newsModel
-                let filterItems = self.newsModel.map { item -> FilterItem in
-                    let favName = self.favorites.first(where: { $0.id == item.appid })?.name ?? ""
-                    return FilterItem(gameID: String(item.appid), name: favName, isEnabled: false)
-                }
-                self.filterViewController.newsModel.filteredGames = Array(Set<FilterItem>(filterItems))
-                DispatchQueue.main.async {
-                    self.newsList.tableView.reloadData()
-                }
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -70,6 +62,29 @@ class NewsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         newsList.update(state: NewsListState(title: "News", color: .white))
+        
+        let completionOperation = BlockOperation {
+            DispatchQueue.main.async {
+                self.newsList.tableView.reloadData()
+            }
+        }
+        
+        favorites = storageManager.fetchFavoritesGamesToModel()
+        for fav in favorites {
+            let loadOperation = BlockOperation  {
+                self.loadNewsPage(appId: Int(fav.id))
+            }
+            completionOperation.addDependency(loadOperation)
+            newsOperationQueue.addOperation(loadOperation)
+        }
+        
+        newsOperationQueue.addOperation(completionOperation)
+        
+        self.filterViewController.newsModel.filteredGames = favorites.map {
+            FilterItem(gameID: String($0.id),
+                       name: $0.name ?? "",
+                       isEnabled: false)
+        }
     }
     
     private func setupNavBar() {
@@ -95,13 +110,6 @@ class NewsViewController: UIViewController {
         
         newsOperationQueue.maxConcurrentOperationCount = 5
         newsOperationQueue.qualityOfService = .utility
-        
-        favorites = storageManager.fetchFavoritesGamesToModel()
-        for fav in favorites {
-            newsOperationQueue.addOperation {
-                self.loadNewsPage(appId: Int(fav.id))
-            }
-        }
     }
     
     @objc
@@ -122,7 +130,7 @@ class NewsViewController: UIViewController {
         guard !gamesID.isEmpty else {
             newsModel = filterViewController.newsModel.filteredNews
             newsList.tableView.reloadData()
-          return
+            return
         }
         newsModel = filterViewController.newsModel.filteredNews.filter { gamesID.contains(String($0.appid)) }
         newsList.tableView.reloadData()
@@ -163,8 +171,8 @@ extension NewsViewController: UITableViewDataSource {
         let favName = favorites.first(where: { $0.id == newsModel[indexPath.row].appid })?.name ?? ""
         print("Tapped")
         let detailNewsController = DetailNewsViewController(games: gamesManager,
-                                                        storage: storageManager,
-                                                        network: networkManager,
+                                                            storage: storageManager,
+                                                            network: networkManager,
                                                             appId: self.newsModel[indexPath.row].appid,
                                                             title: self.newsModel[indexPath.row].title,
                                                             name: favName,

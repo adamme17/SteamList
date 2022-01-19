@@ -19,6 +19,7 @@ class GameCell: UITableViewCell {
         didSet {
             if isFavotite == false {
                 favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+                storageManager.deleteItemFromFavorites(id: appId)
             } else {
                 favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
                 guard let games = cellViewModel else { return }
@@ -39,7 +40,6 @@ class GameCell: UITableViewCell {
     @objc func buttonTapped(sender: UIButton) {
         print("Button was tapped")
         isFavotite.toggle()
-        storageManager.deleteItemFromFavorites(id: appId)
       }
 
     private var cellViewModel: Games?

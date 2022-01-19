@@ -12,7 +12,7 @@ class FilterViewController: NSObject, UITableViewDataSource, UITableViewDelegate
     var newsModel = FilterNews()
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsModel.filteredGames.count ?? 0
+        return newsModel.filteredGames.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
