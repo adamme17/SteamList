@@ -12,6 +12,7 @@ class GameListViewController: UIViewController {
     var safeArea: UILayoutGuide!
     var gamesStorage = [Games]()
     var dataSource = [Games]()
+    let child = SpinnerViewController()
     
     var gamesManager: GamesManagerProtocol
     let storageManager: StoreManagerProtocol
@@ -36,6 +37,9 @@ class GameListViewController: UIViewController {
         gamesManager.getGames(endPoint: .getGamesList) { result in
             switch result {
             case .success(let games):
+                DispatchQueue.main.async {
+                    self.removeSpinnerView()
+                }
                 let games = games.applist.apps
                 for game in games {
                     if !game.name.isEmpty {
@@ -57,6 +61,9 @@ class GameListViewController: UIViewController {
         listView.update(state: GameListState(title: "Games", color: .white))
         let gamesList = storageManager.fetchAllData()
         if gamesList.isEmpty {
+            DispatchQueue.main.async {
+                self.createSpinnerView()
+            }
             loadEventsPage()
         } else {
             dataSource = gamesList
@@ -75,6 +82,19 @@ class GameListViewController: UIViewController {
         listView.tableView.dataSource = self
         listView.tableView.delegate = self
         listView.tableView.register(GameCell.self, forCellReuseIdentifier: "cellId")
+    }
+    
+    func createSpinnerView() {
+        addChild(child)
+        child.view.frame = view.frame
+        view.addSubview(child.view)
+        child.didMove(toParent: self)
+    }
+    
+    func removeSpinnerView() {
+        self.child.willMove(toParent: nil)
+        self.child.view.removeFromSuperview()
+        self.child.removeFromParent()
     }
     
     // MARK: - Setup View
@@ -121,11 +141,6 @@ extension GameListViewController: UISearchBarDelegate {
         searchBar.showsCancelButton = false
         searchBar.text = ""
         searchBar.resignFirstResponder()
-//        if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
-//            textfield.textColor = UIColor.white
-//        }
-//        searchBar.tintColor = .white
-//        searchBar.backgroundColor = .white
         self.dataSource = gamesStorage
         self.listView.tableView.reloadData()
     }

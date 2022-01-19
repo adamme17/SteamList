@@ -28,6 +28,9 @@ final class FavoritesView: BackgroundView {
     lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar(frame: .zero)
         searchBar.backgroundColor = .clear
+        searchBar.searchTextField.textColor = .white
+        searchBar.searchTextField.tintColor = .white
+        searchBar.searchTextField.leftView?.tintColor = .lightGray
         searchBar.searchBarStyle = .minimal
         searchBar.isTranslucent = false
         searchBar.placeholder = "Search"

@@ -14,6 +14,7 @@ class NewsViewController: UIViewController {
     var safeArea: UILayoutGuide!
     private var newsModel = [Newsitem]()
     private var favorites = [FavoriteGames]()
+    let child = SpinnerViewController()
     
     var gamesManager: GamesManagerProtocol
     let storageManager: StoreManagerProtocol
@@ -42,6 +43,9 @@ class NewsViewController: UIViewController {
             guard let self = self else { return }
             switch result {
             case .success(let model):
+                DispatchQueue.main.async {
+                    self.removeSpinnerView()
+                }
                 self.newsModel += model["appnews"]?.newsitems ?? []
                 self.newsModel = self.sortNewsByDate(news:  self.newsModel)
                 self.filterViewController.newsModel.filteredNews = self.newsModel
@@ -71,6 +75,9 @@ class NewsViewController: UIViewController {
         
         favorites = storageManager.fetchFavoritesGamesToModel()
         for fav in favorites {
+            DispatchQueue.main.async {
+                self.createSpinnerView()
+            }
             let loadOperation = BlockOperation  {
                 self.loadNewsPage(appId: Int(fav.id))
             }
@@ -110,6 +117,19 @@ class NewsViewController: UIViewController {
         
         newsOperationQueue.maxConcurrentOperationCount = 5
         newsOperationQueue.qualityOfService = .utility
+    }
+    
+    func createSpinnerView() {
+        addChild(child)
+        child.view.frame = view.frame
+        view.addSubview(child.view)
+        child.didMove(toParent: self)
+    }
+    
+    func removeSpinnerView() {
+        self.child.willMove(toParent: nil)
+        self.child.view.removeFromSuperview()
+        self.child.removeFromParent()
     }
     
     @objc
