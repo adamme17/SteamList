@@ -31,6 +31,7 @@
 		4552D52B2746775000B16B0D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552D52A2746775000B16B0D /* NetworkManager.swift */; };
 		4552D52D2746787100B16B0D /* GamesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552D52C2746787100B16B0D /* GamesManager.swift */; };
 		4552D52F2746788400B16B0D /* GamesManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552D52E2746788400B16B0D /* GamesManagerProtocol.swift */; };
+		4561F79827989DA80021F4BB /* SpinnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4561F79727989DA80021F4BB /* SpinnerViewController.swift */; };
 		456A8EE027451D6200875379 /* GameListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8EDF27451D6200875379 /* GameListViewController.swift */; };
 		456A8EE22745427800875379 /* GameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456A8EE12745427800875379 /* GameCell.swift */; };
 		45766A742744FB6500F59FDA /* Games.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45766A732744FB6500F59FDA /* Games.swift */; };
@@ -109,6 +110,7 @@
 		4552D52A2746775000B16B0D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		4552D52C2746787100B16B0D /* GamesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesManager.swift; sourceTree = "<group>"; };
 		4552D52E2746788400B16B0D /* GamesManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesManagerProtocol.swift; sourceTree = "<group>"; };
+		4561F79727989DA80021F4BB /* SpinnerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerViewController.swift; sourceTree = "<group>"; };
 		456A8EDF27451D6200875379 /* GameListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListViewController.swift; sourceTree = "<group>"; };
 		456A8EE12745427800875379 /* GameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCell.swift; sourceTree = "<group>"; };
 		45766A732744FB6500F59FDA /* Games.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Games.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				45D94885274E2AAA002724A9 /* AppDelegate+RootView.swift */,
 				454F3738275A029400E4FB6B /* BackgroundView.swift */,
 				45869DE12794645800610480 /* LocalNotification.swift */,
+				4561F79727989DA80021F4BB /* SpinnerViewController.swift */,
 			);
 			path = "Supproting Files";
 			sourceTree = "<group>";
@@ -536,6 +539,7 @@
 				45CB6890276A128C00AC236B /* ScreenshotView.swift in Sources */,
 				45F3D7862794B139008F292B /* DetailNewsView.swift in Sources */,
 				452F8EC027859C8100C6A2FA /* FavoriteGames+CoreDataProperties.swift in Sources */,
+				4561F79827989DA80021F4BB /* SpinnerViewController.swift in Sources */,
 				45949A31275F4D750004881C /* StoreManagerProtocol.swift in Sources */,
 				45287ED5277B451800580FE1 /* FavoritesCell.swift in Sources */,
 				45B7689E275615FC0001C34A /* GameListDB.xcdatamodeld in Sources */,

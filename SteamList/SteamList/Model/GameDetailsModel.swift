@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 struct GameDetailsModel: Codable {
     let appId: [String: DetailResponse]?
 }

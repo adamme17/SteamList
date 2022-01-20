@@ -30,6 +30,9 @@ final class GameListView: BackgroundView {
         let searchBar = UISearchBar(frame: .zero)
         searchBar.backgroundColor = .clear
         searchBar.searchBarStyle = .minimal
+        searchBar.searchTextField.textColor = .white
+        searchBar.searchTextField.tintColor = .white
+        searchBar.searchTextField.leftView?.tintColor = .lightGray
         searchBar.isTranslucent = false
         searchBar.placeholder = "Search"
         return searchBar
