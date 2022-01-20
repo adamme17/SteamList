@@ -41,7 +41,8 @@ class FavoritesViewController: UIViewController {
         dataSource = gamesList
         gamesStorage = gamesList
         DispatchQueue.main.async {
-            self.favList.tableView.reloadData()
+            self.reloadTableView()
+            self.filterDataBySearchRequest()
         }
     }
     
@@ -107,12 +108,12 @@ class FavoritesViewController: UIViewController {
     
     private func sortByName() {
         dataSource.sort { ($0.name?.lowercased() ?? "") < ($1.name?.lowercased() ?? "") }
-        favList.tableView.reloadData()
+        reloadTableView()
     }
     
     private func sortByPrice() {
         dataSource.sort { ($0.finalFormatted?.lowercased() ?? "") < ($1.finalFormatted?.lowercased() ?? "") }
-        favList.tableView.reloadData()
+        reloadTableView()
     }
 }
 
@@ -121,7 +122,6 @@ extension FavoritesViewController: UITableViewDelegate {}
 extension FavoritesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         dataSource.count
-//        favModel?.filteredFavoritesList.count ?? 0
     }
     
     
@@ -133,8 +133,14 @@ extension FavoritesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-//            CoreDataManager.shared().deleteItemFromFavorites(id: indexPath.row)
-//            favList.tableView.deleteRows(at: [indexPath], with: .fade)
+            CoreDataManager.shared().deleteItemFromFavorites(id: indexPath.row)
+            favList.tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
+    private func reloadTableView() {
+        DispatchQueue.main.async {
+            self.favList.tableView.reloadData()
         }
     }
 }
@@ -149,15 +155,23 @@ extension FavoritesViewController: UISearchBarDelegate {
         searchBar.text = ""
         searchBar.resignFirstResponder()
         self.dataSource = gamesStorage
-        self.favList.tableView.reloadData()
+        reloadTableView()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.filterDataBySearchRequest()
+    }
+    
+    private func filterDataBySearchRequest() {
+        guard let searchText = self.favList.searchBar.searchTextField.text else { return }
         if !searchText.isEmpty {
             self.dataSource = gamesStorage.filter({ game -> Bool in
                 return game.name?.lowercased().contains(searchText.lowercased()) ?? false
             })
-            self.favList.tableView.reloadData()
+            reloadTableView()
+        } else {
+            self.dataSource = gamesStorage
+            reloadTableView()
         }
     }
 }

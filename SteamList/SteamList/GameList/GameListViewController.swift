@@ -48,9 +48,7 @@ class GameListViewController: UIViewController {
                     }
                 }
                 self.storageManager.prepare(dataForSaving: self.dataSource)
-                DispatchQueue.main.async {
-                    self.listView.tableView.reloadData()
-                }
+                self.reloadTableView()
             case .failure(let error):
                 print("Error: \(error.localizedDescription)")
             }
@@ -69,7 +67,8 @@ class GameListViewController: UIViewController {
             dataSource = gamesList
             gamesStorage = gamesList
             DispatchQueue.main.async {
-                self.listView.tableView.reloadData()
+                self.reloadTableView()
+                self.filterDataBySearchRequest()
             }
         }
     }
@@ -130,6 +129,12 @@ extension GameListViewController: UITableViewDataSource {
                                                         name: dataSource[indexPath.row].name, isFavorite: dataSource[indexPath.row].isFavorite)
         self.navigationController?.pushViewController(detailController, animated: true)
     }
+    
+    private func reloadTableView() {
+        DispatchQueue.main.async {
+            self.listView.tableView.reloadData()
+        }
+    }
 }
 
 extension GameListViewController: UISearchBarDelegate {
@@ -142,15 +147,23 @@ extension GameListViewController: UISearchBarDelegate {
         searchBar.text = ""
         searchBar.resignFirstResponder()
         self.dataSource = gamesStorage
-        self.listView.tableView.reloadData()
+        reloadTableView()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.filterDataBySearchRequest()
+    }
+    
+    private func filterDataBySearchRequest() {
+        guard let searchText = self.listView.searchBar.searchTextField.text else { return }
         if !searchText.isEmpty {
             self.dataSource = gamesStorage.filter({ game -> Bool in
                 return game.name.lowercased().contains(searchText.lowercased())
             })
-            self.listView.tableView.reloadData()
+            self.reloadTableView()
+        } else {
+            self.dataSource = gamesStorage
+            reloadTableView()
         }
     }
 }
