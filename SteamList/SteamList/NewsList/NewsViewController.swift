@@ -49,6 +49,10 @@ class NewsViewController: UIViewController {
                 self.newsModel += model["appnews"]?.newsitems ?? []
                 self.newsModel = self.sortNewsByDate(news:  self.newsModel)
                 self.filterViewController.newsModel.filteredNews = self.newsModel
+                DispatchQueue.main.async {
+                    self.newsList.tableView.reloadData()
+                }
+                
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -74,17 +78,19 @@ class NewsViewController: UIViewController {
         }
         
         favorites = storageManager.fetchFavoritesGamesToModel()
-        for fav in favorites {
-            DispatchQueue.main.async {
-                self.createSpinnerView()
-            }
-            let loadOperation = BlockOperation  {
-                self.loadNewsPage(appId: Int(fav.id))
-            }
-            completionOperation.addDependency(loadOperation)
-            newsOperationQueue.addOperation(loadOperation)
-        }
         
+        if newsModel.isEmpty {
+            for fav in favorites {
+                DispatchQueue.main.async {
+                    self.createSpinnerView()
+                }
+                let loadOperation = BlockOperation  {
+                    self.loadNewsPage(appId: Int(fav.id))
+                }
+                completionOperation.addDependency(loadOperation)
+                newsOperationQueue.addOperation(loadOperation)
+            }
+        }
         newsOperationQueue.addOperation(completionOperation)
         
         self.filterViewController.newsModel.filteredGames = favorites.map {
@@ -117,6 +123,7 @@ class NewsViewController: UIViewController {
         
         newsOperationQueue.maxConcurrentOperationCount = 5
         newsOperationQueue.qualityOfService = .utility
+        
     }
     
     func createSpinnerView() {
