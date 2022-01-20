@@ -124,34 +124,24 @@ final class DetailGameView: BackgroundView {
         
         
         scrollView.snp.makeConstraints { make in
-//            make.top.bottom.equalToSuperview()
-//            make.width.equalToSuperview()
-//            make.centerX.equalToSuperview()
+            make.width.equalToSuperview()
             make.top.bottom.leading.trailing.equalToSuperview()
         }
         contentView.snp.makeConstraints { make in
-//            make.top.bottom.equalTo(self.scrollView)
-//            make.left.right.equalToSuperview()
-//            make.width.equalTo(self.scrollView)
-//            make.height.equalTo(self.scrollView)
             make.centerX.width.top.bottom.equalToSuperview()
         }
         headerImage.snp.makeConstraints { make in
             make.leading.trailing.equalTo(contentView)
-            //            make.top.equalTo(safeAreaLayoutGuide.snp.top)
             make.top.equalToSuperview()
-//            make.height.equalTo(200)
             make.height.equalTo(nameLabel.snp.width).multipliedBy(0.5)
         }
         nameLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-//            make.height.equalTo(50)
             make.leading.trailing.equalToSuperview().inset(35)
             make.top.equalTo(headerImage.snp.bottom).offset(10)
         }
         isFavoriteButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(10)
-//            make.height.equalTo(50)
             make.top.equalTo(headerImage.snp.bottom).offset(10)
         }
         genreLabel.snp.makeConstraints { make in
@@ -198,7 +188,6 @@ final class DetailGameView: BackgroundView {
             make.top.equalTo(horizontalLine.snp.bottom).offset(20)
             make.leading.equalTo(contentView).offset(10)
             make.trailing.equalTo(contentView).offset(-10)
-//            make.height.greaterThanOrEqualTo(100)
         }
     }
     
@@ -221,7 +210,6 @@ final class DetailGameView: BackgroundView {
                 make.leading.equalToSuperview().offset(10)
                 make.trailing.equalToSuperview().offset(-10)
                 make.height.equalTo(self.snp.width).multipliedBy(0.5)
-//                make.bottom.equalTo(contentView)
                 if count == numbers - 1 {
                     make.bottom.equalTo(contentView)
                 }

@@ -75,6 +75,12 @@ class NewsViewController: UIViewController {
             DispatchQueue.main.async {
                 self.newsList.tableView.reloadData()
             }
+            
+            self.filterViewController.newsModel.filteredGames = self.favorites.map {
+                FilterItem(gameID: String($0.id),
+                           name: $0.name ?? "",
+                           isEnabled: false)
+            }
         }
         
         favorites = storageManager.fetchFavoritesGamesToModel()
@@ -91,13 +97,8 @@ class NewsViewController: UIViewController {
                 newsOperationQueue.addOperation(loadOperation)
             }
         }
-        newsOperationQueue.addOperation(completionOperation)
         
-        self.filterViewController.newsModel.filteredGames = favorites.map {
-            FilterItem(gameID: String($0.id),
-                       name: $0.name ?? "",
-                       isEnabled: false)
-        }
+        newsOperationQueue.addOperation(completionOperation)
     }
     
     private func setupNavBar() {
@@ -123,7 +124,6 @@ class NewsViewController: UIViewController {
         
         newsOperationQueue.maxConcurrentOperationCount = 5
         newsOperationQueue.qualityOfService = .utility
-        
     }
     
     func createSpinnerView() {
