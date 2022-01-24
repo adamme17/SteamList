@@ -10,12 +10,18 @@ import Foundation
 protocol StoreManagerProtocol {
     static func shared() -> CoreDataManager
     func applicationLibraryDirectory()
-    func prepare(dataForSaving: [Games])
+    func prepare(dataForSaving: [Games]) -> Bool
+    func prepareDetails(dataForSaving: [Details]) -> Bool
+    func prepareFavorites(dataForSaving: [Details]) -> Bool
+    func prepareFavorites(dataForSaving: [Games]) -> Bool
+    func prepareGenres(dataForSaving: Details) -> Bool
+    func prepareScreens(dataForSaving: Details) -> Bool
     func createEntityFrom(games: Games) -> GameItems?
-    func saveData()
+    func saveData() -> Bool
     func fetchAllData() -> [Games]
     func fetchGameDetail(id: Int) -> Details?
     func fetchFavoritesGames() -> [Int]
     func fetchFavoritesGamesToModel() -> [FavoriteGames]
+    func deleteItemFromFavorites(id: Int) -> Bool
     func storeDataAsync(data: [Games])
 }
