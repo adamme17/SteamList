@@ -12,7 +12,7 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
     
     let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     
-    private override init() {
+    override init() {
         super.init()
         applicationLibraryDirectory()
         privateMOC.parent = managedObjectContext
@@ -82,38 +82,38 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         return persistentStoreCoordinator
     }()
     
-    func prepare(dataForSaving: [Games]) {
+    func prepare(dataForSaving: [Games]) -> Bool {
         _ = dataForSaving.map {self.createEntityFrom(games: $0)}
-        saveData()
+        return saveData()
     }
     
-    func prepareDetails(dataForSaving: [Details]) {
+    func prepareDetails(dataForSaving: [Details]) -> Bool {
         _ = dataForSaving.map {
             self.createDetailsEntityFrom(details: $0)
             self.prepareScreens(dataForSaving: $0)
             self.prepareGenres(dataForSaving: $0)
         }
-        saveData()
+        return saveData()
     }
     
-    func prepareFavorites(dataForSaving: [Details]) {
+    func prepareFavorites(dataForSaving: [Details]) -> Bool {
         _ = dataForSaving.map {self.createFavoritesEntityFrom(details: $0)}
-        saveData()
+        return saveData()
     }
     
-    func prepareFavorites(dataForSaving: [Games]) {
+    func prepareFavorites(dataForSaving: [Games]) -> Bool {
         _ = dataForSaving.map {self.createFavoritesEntityFrom(game: $0)}
-        saveData()
+        return saveData()
     }
     
-    func prepareGenres(dataForSaving: Details) {
+    func prepareGenres(dataForSaving: Details) -> Bool {
         _ = dataForSaving.genres?.compactMap {self.createGenereDescriptionFrom(genre: $0, appid: dataForSaving.steamAppid ?? 0)}
-        saveData()
+        return saveData()
     }
     
-    func prepareScreens(dataForSaving: Details) {
+    func prepareScreens(dataForSaving: Details) -> Bool {
         _ = dataForSaving.screenshots?.compactMap {self.createScreensFrom(screen: $0, appid: dataForSaving.steamAppid ?? 0)}
-        saveData()
+        return saveData()
     }
     
     internal func createEntityFrom(games: Games) -> GameItems? {
@@ -185,17 +185,20 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         return favorites
     }
     
-    func saveData() {
+    func saveData() -> Bool {
         
         let context = self.managedObjectContext
         if context.hasChanges {
             do {
                 try context.save()
+                return true
             } catch {
                 let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                print(error.localizedDescription)
+                return false
             }
         }
+        return false
     }
     
     func fetchAllData() -> [Games] {
@@ -354,13 +357,13 @@ class CoreDataManager: NSObject, StoreManagerProtocol {
         return favorites
     }
     
-    func deleteItemFromFavorites(id: Int) {
+    func deleteItemFromFavorites(id: Int) -> Bool {
         guard let favorite = fetchFavoritesGamesToModel()
                 .first(where: { Int($0.id) == id })
-        else { return }
+        else { return false }
         
         managedObjectContext.delete(favorite)
-        saveData()
+        return saveData()
     }
     
     func storeDataAsync(data: [Games]) {
