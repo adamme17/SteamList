@@ -86,5 +86,15 @@ class SteamListTests: XCTestCase {
             }
         }
     }
+    
+    func testGameListDecoding() throws {
+        let jsonData = try Data(contentsOf: URL(string: "https://api.steampowered.com/ISteamApps/GetAppList/v2/?")!)
+        XCTAssertNoThrow(try JSONDecoder().decode(GamesList.self, from: jsonData))
+    }
+    
+    func testGameDetailsDecoding() throws {
+        let jsonData = try Data(contentsOf: URL(string: "https://store.steampowered.com/api/appdetails?appids=1869020")!)
+        XCTAssertNoThrow(try JSONDecoder().decode(Details.self, from: jsonData))
+    }
 }
 
